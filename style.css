@@ -1,0 +1,1198 @@
+/* =========================
+   GENERAL
+========================= */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background-color: #f8f5ec;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #222;
+}
+
+
+/* =========================
+   MAIN CONTAINER
+========================= */
+
+.signup-container {
+    min-height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 30px;
+}
+
+
+/* =========================
+   SIGN UP CARD
+========================= */
+
+.signup-card {
+    width: 100%;
+    max-width: 216px;
+}
+
+
+/* =========================
+   LOGO
+========================= */
+
+.logo-section {
+    text-align: center;
+    margin-bottom: 38px;
+}
+
+
+/* Simple leaf logo */
+.leaf-logo {
+    width: 38px;
+    height: 28px;
+
+    margin: 0 auto 3px;
+
+    position: relative;
+    transform: rotate(-15deg);
+}
+
+.leaf-logo::before {
+    content: "";
+
+    position: absolute;
+
+    width: 32px;
+    height: 18px;
+
+    background-color: #536b32;
+
+    border-radius: 100% 0 100% 0;
+
+    top: 2px;
+    left: 4px;
+}
+
+.leaf-logo::after {
+    content: "";
+
+    position: absolute;
+
+    width: 20px;
+    height: 2px;
+
+    background-color: #f8f5ec;
+
+    transform: rotate(-35deg);
+
+    top: 12px;
+    left: 10px;
+}
+
+
+.logo-section h1 {
+    margin: 0;
+
+    font-family: Georgia, "Times New Roman", serif;
+
+    font-size: 28px;
+    font-weight: 500;
+
+    color: #30302d;
+}
+
+.logo-section p {
+    margin: 2px 0 0;
+
+    font-size: 9px;
+
+    color: #3f3f3b;
+}
+
+
+/* =========================
+   FORM
+========================= */
+
+.form-label {
+    font-size: 8px;
+    font-weight: 600;
+
+    margin-bottom: 4px;
+
+    color: #343431;
+}
+
+
+.form-control {
+    height: 27px;
+
+    border: 1px solid #d0cbbf;
+
+    border-radius: 6px;
+
+    background-color: transparent;
+
+    font-size: 8px;
+
+    padding: 6px 9px;
+
+    box-shadow: none;
+}
+
+
+.form-control::placeholder {
+    color: #c7c3ba;
+}
+
+
+.form-control:focus {
+    border-color: #7e7a70;
+
+    box-shadow: none;
+
+    background-color: transparent;
+}
+
+
+/* =========================
+   SIGN UP BUTTON
+========================= */
+
+.signup-btn {
+    width: 100%;
+
+    height: 25px;
+
+    margin-top: 2px;
+
+    border: none;
+
+    border-radius: 20px;
+
+    background-color: #87352f;
+
+    color: white;
+
+    font-size: 8px;
+    font-weight: 600;
+}
+
+
+.signup-btn:hover {
+    background-color: #702c27;
+
+    color: white;
+}
+
+
+/* =========================
+   DIVIDER
+========================= */
+
+.divider {
+    display: flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    margin: 28px 0 20px;
+}
+
+
+.divider span {
+    flex: 1;
+
+    height: 1px;
+
+    background-color: #222;
+}
+
+
+.divider p {
+    margin: 0;
+
+    font-size: 10px;
+
+    color: #222;
+}
+
+
+/* =========================
+   SOCIAL LOGIN
+========================= */
+
+.social-login {
+    display: flex;
+
+    justify-content: center;
+
+    gap: 25px;
+}
+
+
+.social-btn {
+    width: 20px;
+    height: 20px;
+
+    padding: 0;
+
+    border-radius: 50%;
+
+    background-color: #f8f5ec;
+
+    border: 1px solid #d6d2c8;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+}
+
+
+.social-btn i {
+    font-size: 11px;
+}
+
+
+.google i {
+    color: #4285f4;
+}
+
+
+.apple i {
+    color: #111;
+}
+
+
+.facebook i {
+    color: #1877f2;
+}
+
+
+/* =========================
+   LOGIN TEXT
+========================= */
+
+.login-text {
+    text-align: center;
+
+    margin-top: 28px;
+
+    font-size: 8px;
+
+    color: #555;
+}
+
+
+.login-text a {
+    color: #87352f;
+
+    text-decoration: none;
+
+    font-weight: 600;
+}
+
+
+.login-text a:hover {
+    text-decoration: underline;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 576px) {
+
+    .signup-card {
+        max-width: 280px;
+    }
+
+    .logo-section h1 {
+        font-size: 32px;
+    }
+
+    .form-label {
+        font-size: 10px;
+    }
+
+    .form-control {
+        height: 36px;
+        font-size: 11px;
+    }
+
+    .signup-btn {
+        height: 36px;
+        font-size: 11px;
+    }
+
+}
+
+Dietay Preferences Page--
+/* =========================================
+   RESET
+========================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Inter", sans-serif;
+    background: #f7f3e9;
+    color: #292929;
+}
+
+
+/* =========================================
+   MAIN PAGE
+========================================= */
+
+.page {
+    min-height: 100vh;
+    padding-top: 55px;
+    padding-bottom: 40px;
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.header {
+    text-align: center;
+}
+
+
+/* Leaf Logo */
+
+.leaf-logo {
+    width: 42px;
+    height: 42px;
+    margin: 0 auto 3px;
+
+    position: relative;
+}
+
+.leaf-logo span {
+    position: absolute;
+
+    width: 35px;
+    height: 21px;
+
+    background: #617743;
+
+    border-radius: 100% 0 100% 0;
+
+    transform: rotate(-25deg);
+
+    top: 8px;
+    left: 5px;
+}
+
+.leaf-logo span::after {
+    content: "";
+
+    position: absolute;
+
+    width: 25px;
+    height: 1px;
+
+    background: #f7f3e9;
+
+    transform: rotate(-25deg);
+
+    top: 12px;
+    left: 5px;
+}
+
+
+/* EatWise */
+
+.header h1 {
+    font-family: "Playfair Display", serif;
+
+    font-size: 27px;
+    font-weight: 600;
+
+    color: #414141;
+
+    line-height: 1.1;
+
+    margin-bottom: 3px;
+}
+
+
+/* Subtitle */
+
+.header h2 {
+    font-family: "Inter", sans-serif;
+
+    font-size: 15px;
+    line-height: 1.25;
+
+    font-weight: 700;
+
+    color: #353535;
+
+    margin-bottom: 7px;
+}
+
+
+/* Description */
+
+.header p {
+    font-size: 12px;
+
+    line-height: 1.35;
+
+    color: #303030;
+}
+
+
+/* =========================================
+   CONTENT
+========================================= */
+
+.preferences-container {
+    display: flex;
+
+    justify-content: center;
+
+    gap: 60px;
+
+    margin-top: 28px;
+}
+
+
+/* Each section */
+
+.preference-section {
+    width: 208px;
+}
+
+
+/* Section title */
+
+.preference-section h3 {
+    font-size: 9px;
+
+    font-weight: 700;
+
+    color: #292929;
+
+    margin-bottom: 7px;
+
+    padding-left: 4px;
+}
+
+
+/* =========================================
+   CARD
+========================================= */
+
+.preference-card {
+    background: #ffffff;
+
+    border-radius: 10px;
+
+    overflow: hidden;
+
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+}
+
+
+/* =========================================
+   DIETARY ITEM
+========================================= */
+
+.preference-item {
+    height: 33px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 0 11px 0 12px;
+
+    border-bottom: 1px solid #eeeeee;
+}
+
+
+/* Left side */
+
+.item-left {
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    font-size: 10px;
+
+    color: #747474;
+}
+
+
+/* Icon */
+
+.item-icon {
+    width: 14px;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    color: #c88982;
+
+    font-size: 13px;
+}
+
+
+/* =========================================
+   TOGGLE SWITCH
+========================================= */
+
+.switch {
+    position: relative;
+
+    width: 15px;
+    height: 9px;
+
+    display: inline-block;
+}
+
+.switch input {
+    display: none;
+}
+
+.slider {
+    position: absolute;
+
+    cursor: pointer;
+
+    inset: 0;
+
+    background: #e8e8e8;
+
+    border: 1px solid #c9c9c9;
+
+    border-radius: 20px;
+
+    transition: 0.2s;
+}
+
+.slider::before {
+    content: "";
+
+    position: absolute;
+
+    width: 5px;
+    height: 5px;
+
+    left: 1px;
+    top: 1px;
+
+    background: #ffffff;
+
+    border-radius: 50%;
+
+    transition: 0.2s;
+}
+
+
+
+
+
+/* =========================================
+   ALLERGEN ITEMS
+========================================= */
+
+.allergen-item {
+    height: 33px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 0 11px 0 12px;
+
+    border-bottom: 1px solid #eeeeee;
+
+    cursor: pointer;
+}
+
+
+/* Allergen text */
+
+.allergen-item .item-left span:last-child {
+    color: #888888;
+}
+
+
+/* Active allergen */
+
+.allergen-item.active .item-left span:last-child {
+    color: #353535;
+
+    font-weight: 600;
+}
+
+
+/* Icons */
+
+.allergen-icon {
+    width: 14px;
+
+    display: inline-flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    color: #d18d83;
+
+    font-size: 14px;
+}
+
+.allergen-icon.peanut {
+    color: #c79565;
+}
+
+
+/* Check */
+
+.check {
+    width: 10px;
+    height: 10px;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    background: #a9605a;
+
+    color: white;
+
+    font-size: 7px;
+
+    border-radius: 1px;
+}
+
+
+/* =========================================
+   OTHER ALLERGEN
+========================================= */
+
+.other-allergen {
+    width: 100%;
+
+    height: 27px;
+
+    border: none;
+
+    background: #fff5f4;
+
+    border-top: 1px solid #e7d8d6;
+
+    color: #b66e68;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding-left: 10px;
+
+    font-size: 9px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    text-align: left;
+}
+
+.other-allergen:hover {
+    background: #fcebea;
+}
+
+
+/* Plus */
+
+.plus {
+    font-size: 17px;
+
+    font-weight: 300;
+
+    line-height: 1;
+}
+
+
+/* =========================================
+   SAVE BUTTON
+========================================= */
+
+.save-container {
+    display: flex;
+
+    justify-content: center;
+
+    margin-top: 37px;
+}
+
+.save-button {
+    width: 199px;
+
+    height: 23px;
+
+    border: none;
+
+    border-radius: 20px;
+
+    background: #89342f;
+
+    color: white;
+
+    font-family: "Inter", sans-serif;
+
+    font-size: 9px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.save-button:hover {
+    background: #722a26;
+
+    transform: translateY(-1px);
+}
+
+.save-button:active {
+    transform: translateY(0);
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 600px) {
+
+    .page {
+        padding: 40px 20px;
+    }
+
+    .preferences-container {
+        flex-direction: column;
+
+        align-items: center;
+
+        gap: 25px;
+    }
+
+    .preference-section {
+        width: min(100%, 300px);
+    }
+
+    .save-container {
+        margin-top: 30px;
+    }
+
+    .save-button {
+        width: min(100%, 200px);
+    }
+}
+
+/* GENERAL */
+:root {
+    --cream: #f7f3e9;
+    --maroon: #7b302c;
+    --olive: #607d5d;
+    --text: #292923;
+    --muted: #85847d;
+    --border: #e2ded3;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--cream);
+    color: var(--text);
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* NAVBAR */
+.eatwise-navbar {
+    margin-top: 50px;
+    min-height: 54px;
+    background: var(--maroon);
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: white !important;
+    font-family: Georgia, serif;
+    font-size: 21px;
+}
+
+.brand-leaf {
+    color: #8da477;
+    font-size: 27px;
+    transform: rotate(-20deg);
+}
+
+.eatwise-navbar .nav-link {
+    color: #e8d8d0;
+    font-family: Georgia, serif;
+    font-size: 10px;
+    font-weight: bold;
+    padding: 20px 17px !important;
+}
+
+.eatwise-navbar .nav-link:hover,
+.eatwise-navbar .nav-link.active {
+    color: white;
+}
+
+.navbar-toggler {
+    border-color: rgba(255,255,255,0.4);
+}
+
+/* MAIN CONTENT */
+.home-content {
+    max-width: 1600px;
+    margin: auto;
+    padding: 18px 4% 50px;
+}
+
+/* BANNER AND SEARCH */
+.top-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 28px;
+    margin: 0 3.5% 15px;
+}
+
+.welcome-banner {
+    width: 300px;
+    min-height: 105px;
+    flex-shrink: 0;
+    padding: 17px 22px;
+    border-radius: 15px;
+    background: var(--olive);
+    color: white;
+}
+
+.welcome-banner h1 {
+    font-family: Georgia, serif;
+    font-size: 17px;
+    line-height: 1.2;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.welcome-banner p {
+    margin: 0;
+    color: #e6e9df;
+    font-size: 9px;
+    line-height: 1.4;
+}
+
+.search-form {
+    width: 280px;
+    max-width: 100%;
+    position: relative;
+}
+
+.search-form .form-control {
+    height: 36px;
+    border: 1px solid #77766e;
+    border-radius: 9px;
+    background: #fffdf8;
+    padding: 8px 12px;
+    font-size: 10px;
+    box-shadow: none;
+}
+
+.search-form .form-control:focus {
+    border-color: var(--olive);
+    box-shadow: 0 0 0 2px rgba(96,125,93,0.12);
+}
+
+/* CATEGORIES */
+.category-section {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 34px;
+    margin: -100px 0 28px;
+    padding-left: 270px;
+    min-height: 105px;
+}
+
+.category-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 7px;
+    color: #353630;
+    text-decoration: none;
+    font-size: 10px;
+    white-space: nowrap;
+    transition: transform 0.2s;
+}
+
+.category-link:hover {
+    color: var(--maroon);
+    transform: translateY(-2px);
+}
+
+.category-icon {
+    width: 49px;
+    height: 49px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--olive);
+    color: var(--cream);
+    font-size: 20px;
+    border: 2px solid transparent;
+}
+
+.category-link.selected .category-icon {
+    border-color: var(--maroon);
+    box-shadow: 0 0 0 3px rgba(123,48,44,0.12);
+}
+
+/* FOOD SECTION */
+.food-section {
+    margin: 0 3%;
+}
+
+.section-heading {
+    display: none;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+}
+
+.section-heading h2 {
+    font-family: Georgia, serif;
+    font-size: 20px;
+    margin: 0;
+}
+
+.section-heading span {
+    color: var(--muted);
+    font-size: 12px;
+}
+
+/* FOOD CARD */
+.food-card {
+    display: block;
+    height: 100%;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: 13px;
+    background: #f9f6ee;
+    color: inherit;
+    text-decoration: none;
+    box-shadow: 0 1px 2px rgba(38,39,34,0.08);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.food-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 14px rgba(38,39,34,0.12);
+}
+
+.food-image {
+    display: block;
+    width: 100%;
+    height: 108px;
+    object-fit: cover;
+    background: #e6e0d4;
+}
+
+.food-info {
+    padding: 8px 9px 10px;
+}
+
+.food-info h3 {
+    margin: 0 0 7px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.food-meta {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: var(--muted);
+    font-size: 9px;
+    white-space: nowrap;
+}
+
+.meta-dot {
+    color: #b7b1a6;
+}
+
+/* EMPTY SEARCH RESULT */
+.empty-state {
+    text-align: center;
+    padding: 55px 20px;
+    color: var(--muted);
+}
+
+.empty-state i {
+    font-size: 35px;
+    color: var(--olive);
+}
+
+.empty-state h3 {
+    margin-top: 10px;
+    color: var(--text);
+    font-family: Georgia, serif;
+    font-size: 20px;
+}
+
+.empty-state p {
+    font-size: 13px;
+}
+
+.reset-button {
+    background: var(--maroon);
+    color: white;
+    border-radius: 20px;
+    font-size: 12px;
+    padding: 8px 18px;
+}
+
+.reset-button:hover {
+    background: #642622;
+    color: white;
+}
+
+/* TABLET */
+@media (max-width: 991.98px) {
+    .eatwise-navbar {
+        margin-top: 20px;
+    }
+
+    .top-section {
+        margin: 0 1% 22px;
+        align-items: center;
+    }
+
+    .welcome-banner {
+        width: 280px;
+    }
+
+    .category-section {
+        margin: 0 0 25px;
+        padding-left: 0;
+        min-height: auto;
+        gap: 28px;
+    }
+
+    .food-section {
+        margin: 0;
+    }
+
+    .section-heading {
+        display: flex;
+    }
+
+    .food-image {
+        height: 150px;
+    }
+}
+
+/* MOBILE */
+@media (max-width: 575.98px) {
+    .eatwise-navbar {
+        margin-top: 0;
+    }
+
+    .home-content {
+        padding-top: 20px;
+    }
+
+    .top-section {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 15px;
+        margin-bottom: 22px;
+    }
+
+    .welcome-banner {
+        width: 100%;
+        min-height: auto;
+    }
+
+    .search-form {
+        width: 100%;
+    }
+
+    .category-section {
+        justify-content: space-between;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .category-link {
+        font-size: 9px;
+    }
+
+    .category-icon {
+        width: 43px;
+        height: 43px;
+        font-size: 17px;
+    }
+
+    .food-image {
+        height: 120px;
+    }
+
+    .food-info {
+        padding: 8px;
+    }
+
+    .food-info h3 {
+        font-size: 11px;
+    }
+
+    .food-meta {
+        font-size: 9px;
+        gap: 4px;
+    }
+}
