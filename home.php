@@ -120,7 +120,7 @@ $filteredFoods = array_filter($foods, function ($food) use ($search, $category) 
 
 
     <main class="container-fluid home-content">
-
+            
         <!-- BANNER AND SEARCH -->
         <section class="top-section">
 
@@ -135,29 +135,36 @@ $filteredFoods = array_filter($foods, function ($food) use ($search, $category) 
             <form action="home.php" method="GET" class="search-form">
 
                 <?php if ($category !== "all"): ?>
-                    <input type="hidden" name="category"
-                        value="<?= htmlspecialchars($category) ?>">
+                    <input
+                        type="hidden"
+                        name="category"
+                        value="<?= htmlspecialchars($category) ?>"
+                    >
                 <?php endif; ?>
 
-                <input
-                    type="search"
-                    name="search"
-                    class="form-control"
-                    placeholder="Search for Healthy Food"
-                    value="<?= htmlspecialchars($search) ?>"
-                >
+                <div class="search-box">
+                    <input
+                        type="search"
+                        name="search"
+                        class="form-control"
+                        placeholder="Search for Healthy Food"
+                        value="<?= htmlspecialchars($search) ?>"
+                        aria-label="Search for healthy food"
+                    >
 
-                <button type="submit" aria-label="Search">
-                    <i class="bi bi-search"></i>
-                </button>
+                    <button type="submit" aria-label="Search">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </div>
 
             </form>
 
         </section>
 
 
+
         <!-- CATEGORY FILTER -->
-        <section class="category-section" id="categories">
+        <section class="category-section" style="margin-top:10px" id="categories">
 
             <a href="?category=seafood-free"
                class="category-link <?= $category === 'seafood-free' ? 'selected' : '' ?>">
