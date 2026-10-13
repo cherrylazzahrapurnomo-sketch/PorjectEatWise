@@ -1,216 +1,214 @@
+```php
+<?php
+session_start();
+
+$orders = [
+    [
+        "id" => "EW123456",
+        "name" => "Chicken Grill Bowl",
+        "image" => "assets/chicken-bowl.jpg",
+        "price" => 60000,
+        "calories" => 400,
+        "date" => "22 Apr 2026, 13:06",
+        "status" => "Shipped"
+    ],
+    [
+        "id" => "EW123456",
+        "name" => "Caesar Salad",
+        "image" => "assets/caesar-salad.jpg",
+        "price" => 45000,
+        "calories" => 200,
+        "date" => "22 Apr 2026, 13:06",
+        "status" => "Shipped"
+    ],
+    [
+        "id" => "EW060324",
+        "name" => "Oat Berries Meal",
+        "image" => "assets/oat-berries.jpg",
+        "price" => 35000,
+        "calories" => 150,
+        "date" => "13 Mar 2026, 15:06",
+        "status" => "Completed"
+    ]
+];
+
+function e($value) {
+    return htmlspecialchars(
+        (string) $value,
+        ENT_QUOTES,
+        "UTF-8"
+    );
+}
+
+function rupiah($amount) {
+    return "Rp " . number_format($amount, 0, ",", ".");
+}
+
+/* FILTER STATUS */
+$allowedFilters = [
+    "All",
+    "Completed",
+    "Cancelled",
+    "Shipped"
+];
+
+$filter = $_GET["status"] ?? "All";
+
+if (!in_array($filter, $allowedFilters, true)) {
+    $filter = "All";
+}
+
+$filteredOrders = array_filter(
+    $orders,
+    function ($order) use ($filter) {
+        return $filter === "All"
+            || $order["status"] === $filter;
+    }
+);
+?>
 
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EatWise - Order History</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-          rel="stylesheet">
+    <title>Order History | EatWise</title>
 
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-
+    <!-- Gunakan nama CSS yang benar -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+<div class="app-container">
+
     <!-- NAVBAR -->
-    <nav class="navbar navbar-expand-lg navbar-dark navbar-eatwise">
-        <div class="container">
-            <a class="navbar-brand d-flex align-items-center" href="#">
-                <img
-                    src="https://cdn-icons-png.flaticon.com/512/2909/2909761.png"
-                    alt="EatWise Logo"
-                    class="logo"
+    <header class="navbar">
+        <a href="home.php" class="brand">
+            <svg class="brand-leaf"
+                 viewBox="0 0 60 50"
+                 aria-hidden="true">
+                <path
+                    d="M4 44C18 12 32 6 56 4C54 28 36 45 4 44Z"
+                    fill="#72844c"
+                />
+                <path
+                    d="M8 42L43 14"
+                    stroke="#b2b98a"
+                    stroke-width="1.5"
+                    fill="none"
+                />
+            </svg>
+            <span>EatWise</span>
+        </a>
+
+        <nav class="nav-links">
+            <a href="home.php">HOME</a>
+            <a href="categories.php">CATEGORIES</a>
+            <a href="cart.php">CARTS</a>
+            <a href="profile.php">ACCOUNT</a>
+            <a href="login.php" class="logout">LOGOUT</a>
+        </nav>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="history-main">
+
+        <h1>Order History</h1>
+
+        <!-- FILTER TABS -->
+        <nav class="filter-tabs" aria-label="Filter order status">
+            <?php foreach ($allowedFilters as $status): ?>
+                <a
+                    href="orderHistory.php?status=<?= urlencode($status) ?>"
+                    class="filter-tab <?= $filter === $status ? 'active' : '' ?>"
+                    <?= $filter === $status ? 'aria-current="page"' : '' ?>
                 >
-                <span>EatWise</span>
-            </a>
+                    <?= e($status) ?>
+                </a>
+            <?php endforeach; ?>
+        </nav>
 
-            <button class="navbar-toggler" type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#navbarMenu">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+        <!-- ORDER LIST -->
+        <section class="order-list">
 
-            <div class="collapse navbar-collapse" id="navbarMenu">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">HOME</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">CATEGORIES</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">CARTS</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">ACCOUNT</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link logout" href="#">LOGOUT</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+            <?php if (empty($filteredOrders)): ?>
 
-    <!-- ORDER HISTORY -->
-    <main class="container history-container">
+                <div class="empty-state">
+                    <p>
+                        No <?= e(strtolower($filter)) ?> orders found.
+                    </p>
 
-        <h4 class="page-title">Order History</h4>
+                    <a href="orderHistory.php?status=All">
+                        View All Orders
+                    </a>
+                </div>
 
-        <!-- FILTER STATUS -->
-        <div class="status-filters">
-            <button class="filter-btn" onclick="filterOrders('All', this)">
-                All
-            </button>
+            <?php else: ?>
 
-            <button class="filter-btn" onclick="filterOrders('Completed', this)">
-                Completed
-            </button>
+                <?php foreach ($filteredOrders as $order): ?>
 
-            <button class="filter-btn" onclick="filterOrders('Cancelled', this)">
-                Cancelled
-            </button>
+                    <a
+                        class="order-item"
+                        href="order-detail.php?id=<?= urlencode($order['id']) ?>"
+                    >
 
-            <button class="filter-btn active" onclick="filterOrders('Shipped', this)">
-                Shipped
-            </button>
-        </div>
+                        <!-- FOOD IMAGE -->
+                        <div class="food-image">
+                            <img
+                                src="<?= e($order['image']) ?>"
+                                alt="<?= e($order['name']) ?>"
+                            >
+                        </div>
 
-        <!-- ORDER 1 -->
-        <div class="order-row" data-status="Shipped"
-             onclick="showOrder('Chicken Grill Bowl', '60.000', '400 kcal')">
+                        <!-- ORDER INFORMATION -->
+                        <div class="order-info">
+                            <h2>#<?= e($order['id']) ?></h2>
 
-            <img
-                src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=160&h=160&fit=crop"
-                alt="Chicken Grill Bowl"
-                class="food-image"
-            >
+                            <p class="food-name">
+                                <?= e($order['name']) ?>
+                            </p>
 
-            <div class="order-info">
-                <h6>#EW123456</h6>
-                <p class="food-name">Chicken Grill Bowl</p>
-                <small>22 Apr 2026, 13:06</small>
-            </div>
+                            <p class="order-date">
+                                <?= e($order['date']) ?>
+                            </p>
+                        </div>
 
-            <div class="order-status">
-                <span class="badge-shipped">Shipped</span>
-            </div>
+                        <!-- STATUS BADGE -->
+                        <div class="order-status">
+                            <span class="status-badge <?= strtolower(e($order['status'])) ?>">
+                                <?= e($order['status']) ?>
+                            </span>
+                        </div>
 
-            <div class="order-price">
-                <strong>Rp 60.000</strong>
-                <small>400 kcal</small>
-            </div>
+                        <!-- PRICE AND CALORIES -->
+                        <div class="order-summary">
+                            <span class="price">
+                                <?= rupiah($order['price']) ?>
+                            </span>
 
-            <div class="order-arrow">
-                <i class="bi bi-chevron-right"></i>
-            </div>
-        </div>
+                            <span class="calories">
+                                <?= number_format($order['calories']) ?> kcal
+                            </span>
+                        </div>
 
-        <!-- ORDER 2 -->
-        <div class="order-row" data-status="Shipped"
-             onclick="showOrder('Caesar Salad', '45.000', '200 kcal')">
+                        <!-- ARROW -->
+                        <span class="order-arrow" aria-hidden="true">
+                            ›
+                        </span>
 
-            <img
-                src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=160&h=160&fit=crop"
-                alt="Caesar Salad"
-                class="food-image"
-            >
+                    </a>
 
-            <div class="order-info">
-                <h6>#EW123456</h6>
-                <p class="food-name">Caesar Salad</p>
-                <small>22 Apr 2026, 13:06</small>
-            </div>
+                <?php endforeach; ?>
 
-            <div class="order-status">
-                <span class="badge-shipped">Shipped</span>
-            </div>
+            <?php endif; ?>
 
-            <div class="order-price">
-                <strong>Rp 45.000</strong>
-                <small>200 kcal</small>
-            </div>
-
-            <div class="order-arrow">
-                <i class="bi bi-chevron-right"></i>
-            </div>
-        </div>
-
-        <!-- EMPTY MESSAGE -->
-        <div id="emptyMessage" class="empty-message" style="display:none;">
-            No orders found for this status.
-        </div>
+        </section>
 
     </main>
 
-    <!-- ORDER DETAIL MODAL -->
-    <div class="modal fade" id="orderModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-
-                <div class="modal-header">
-                    <h5 class="modal-title">Order Details</h5>
-                    <button type="button" class="btn-close"
-                            data-bs-dismiss="modal"></button>
-                </div>
-
-                <div class="modal-body">
-                    <p><strong>Order ID:</strong> #EW123456</p>
-                    <p><strong>Menu:</strong> <span id="detailName"></span></p>
-                    <p><strong>Price:</strong> Rp <span id="detailPrice"></span></p>
-                    <p><strong>Calories:</strong> <span id="detailCalories"></span></p>
-                    <p><strong>Status:</strong> <span class="badge-shipped">Shipped</span></p>
-                </div>
-
-                <div class="modal-footer">
-                    <button class="btn btn-secondary"
-                            data-bs-dismiss="modal">Close</button>
-                </div>
-
-            </div>
-        </div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-    <script>
-        function filterOrders(status, button) {
-            const buttons = document.querySelectorAll(".filter-btn");
-            const orders = document.querySelectorAll(".order-row");
-            let visibleCount = 0;
-
-            buttons.forEach(btn => btn.classList.remove("active"));
-            button.classList.add("active");
-
-            orders.forEach(order => {
-                const orderStatus = order.dataset.status;
-                const show = status === "All" || orderStatus === status;
-
-                order.style.display = show ? "grid" : "none";
-
-                if (show) visibleCount++;
-            });
-
-            document.getElementById("emptyMessage").style.display =
-                visibleCount === 0 ? "block" : "none";
-        }
-
-        function showOrder(name, price, calories) {
-            document.getElementById("detailName").textContent = name;
-            document.getElementById("detailPrice").textContent = price;
-            document.getElementById("detailCalories").textContent = calories;
-
-            const modal = new bootstrap.Modal(
-                document.getElementById("orderModal")
-            );
-
-            modal.show();
-        }
-    </script>
+</div>
 
 </body>
 </html>
+```
