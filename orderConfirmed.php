@@ -38,7 +38,13 @@ function formatRupiah($amount) {
         <?= $isCancelled ? "Order Cancelled" : "Order Confirmed" ?> | EatWise
     </title>
 
-    <link rel="stylesheet" href="order-confirmed.css">
+   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+          rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
