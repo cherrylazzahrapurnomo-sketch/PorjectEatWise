@@ -164,6 +164,22 @@ require_once __DIR__ . '/navbar.php';
                     </div>
                 </div>
 
+                <!-- INGREDIENTS SECTION (MATCHING IMAGE 1 BACKGROUND) -->
+                <?php $ingredients = get_food_ingredients($food['id']); ?>
+                <div class="card bg-white border rounded-4 p-3 mb-4" id="ingredientsSection">
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="bi bi-card-checklist text-maroon me-2 fs-5"></i>
+                        <span class="fw-bold small text-dark">Fresh Ingredients:</span>
+                    </div>
+                    <div class="d-flex flex-wrap gap-2">
+                        <?php foreach ($ingredients as $ing): ?>
+                            <span class="badge bg-light text-dark border px-3 py-2 rounded-pill small">
+                                <i class="bi bi-check2 text-olive me-1"></i> <?= htmlspecialchars($ing) ?>
+                            </span>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+
                 <!-- ALLERGENS SECTION -->
                 <div class="card bg-white border rounded-4 p-3 mb-4">
                     <div class="d-flex align-items-center mb-2">
@@ -204,7 +220,7 @@ require_once __DIR__ . '/navbar.php';
 
                     <div class="d-flex gap-3">
                         <?php if ($user_has_allergy): ?>
-                            <!-- Trigger Verification Warning Modal -->
+                            <!-- Trigger Verification Warning Modal Matching Image 1 -->
                             <button type="button" class="btn btn-ew-primary py-3 px-4 flex-grow-1 shadow" onclick="showDetailWarningModal()">
                                 <i class="bi bi-bag-plus-fill me-2 fs-5"></i> Add to Cart
                             </button>
@@ -226,40 +242,68 @@ require_once __DIR__ . '/navbar.php';
 
 </div>
 
-<!-- ALLERGEN VERIFICATION MODAL -->
-<?php if ($user_has_allergy): ?>
+<!-- ALLERGEN VERIFICATION MODAL (EXACTLY MATCHING IMAGE 1 DESIGN) -->
+<?php if ($user_has_allergy): 
+    $warn_info = get_allergen_warning_info(implode(', ', $conflicting_allergens));
+?>
 <div class="modal fade" id="detailAllergenModal" tabindex="-1" aria-labelledby="detailAllergenModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0 rounded-4 shadow-lg overflow-hidden">
-            <div class="modal-header border-0 bg-maroon-subtle pb-0">
-                <div class="d-flex align-items-center">
-                    <span class="rounded-circle bg-maroon text-white p-2 d-inline-flex align-items-center justify-content-center me-3" style="width: 44px; height: 44px;">
-                        <i class="bi bi-exclamation-triangle-fill fs-5"></i>
-                    </span>
-                    <div>
-                        <h5 class="modal-title fw-bold text-maroon font-playfair mb-0" id="detailAllergenModalLabel">Allergen Safety Warning</h5>
-                        <small class="text-maroon">Precaution Verification</small>
-                    </div>
+    <div class="modal-dialog modal-dialog-centered ew-warn-dialog">
+        <div class="modal-content ew-warn-card">
+            
+            <!-- Red Warning Triangle Icon with dark exclamation mark -->
+            <div class="ew-warn-triangle-icon">
+                <svg width="68" height="60" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L1 21H23L12 2Z" fill="#FF1E1E"/>
+                    <path d="M12 8.5V13.5" stroke="#441715" stroke-width="2.4" stroke-linecap="round"/>
+                    <circle cx="12" cy="17.2" r="1.3" fill="#441715"/>
+                </svg>
+            </div>
+
+            <!-- Modal Heading in Playfair Display Red -->
+            <h3 class="ew-warn-title" id="detailAllergenModalLabel">Allergen Warning</h3>
+
+            <!-- Centered Subtext (3 lines) -->
+            <p class="ew-warn-subtext">
+                This Food Contains <?= htmlspecialchars($warn_info['category']) ?><br>
+                (According To Our Ingredient Data),<br>
+                Which Matches Your Allergen Preference.
+            </p>
+
+            <!-- Detected Box with Allergen Icon -->
+            <div class="ew-warn-detected-box">
+                <div class="ew-warn-icon-wrap me-3">
+                    <svg width="46" height="46" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M48 16 C 42 12, 34 12, 28 16 C 22 20, 18 28, 20 36 C 22 44, 28 50, 36 54 C 38 55, 42 56, 40 52 C 38 48, 34 46, 32 42 C 28 36, 30 28, 36 24 C 42 20, 48 22, 52 26 C 54 28, 56 26, 54 24 C 52 20, 50 18, 48 16 Z" fill="#E8613A"/>
+                        <path d="M 38 20 C 34 22, 32 26, 32 30" stroke="#FF8A65" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M 34 26 C 30 30, 28 36, 30 40" stroke="#FF8A65" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M 44 14 C 48 10, 54 8, 58 8" stroke="#E8613A" stroke-width="1.5" stroke-linecap="round"/>
+                        <circle cx="44" cy="18" r="2" fill="#2E1C14"/>
+                        <path d="M 38 52 C 40 56, 44 58, 48 56 C 44 54, 42 50, 40 48 Z" fill="#D34B22"/>
+                    </svg>
                 </div>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body p-4">
-                <p class="mb-3 text-dark">
-                    This dish <strong><?= htmlspecialchars($food['food_name']) ?></strong> contains 
-                    <strong class="text-maroon"><?= htmlspecialchars(implode(', ', $conflicting_allergens)) ?></strong>, which is recorded in your personal allergy avoidance profile.
-                </p>
-                <div class="alert alert-danger bg-maroon-subtle border-maroon text-maroon p-3 rounded-3 mb-3 small">
-                    <i class="bi bi-info-circle-fill me-1"></i> Consuming this meal may trigger an allergic reaction. Are you certain you still want to proceed and place this order?
+                <div>
+                    <h5 class="ew-warn-detected-title mb-1"><?= htmlspecialchars($warn_info['detected']) ?></h5>
+                    <small class="ew-warn-detected-sub">E.G. <?= htmlspecialchars($warn_info['examples']) ?></small>
                 </div>
             </div>
-            <div class="modal-footer border-0 pt-0 px-4 pb-4">
-                <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">
-                    <i class="bi bi-x-circle me-1"></i> Cancel
+
+            <!-- Action Buttons matching Image 1 -->
+            <div class="d-flex flex-column gap-2 w-100">
+                <button type="button" class="btn btn-ew-warn-primary py-3 w-100" onclick="focusIngredients()">
+                    View Ingredients
                 </button>
-                <button type="button" class="btn btn-ew-primary rounded-pill px-4" onclick="document.getElementById('orderForm').submit();">
-                    <i class="bi bi-cart-check-fill me-1"></i> Yes, Proceed Anyway
+                <a href="home.php" class="btn btn-ew-warn-secondary py-3 w-100 text-decoration-none">
+                    Choose Another Food
+                </a>
+            </div>
+
+            <!-- Subtle Verification Link to Proceed Anyway -->
+            <div class="text-center mt-3">
+                <button type="button" class="btn btn-link text-white-50 text-decoration-none small p-0 opacity-75" onclick="document.getElementById('orderForm').submit();">
+                    <i class="bi bi-cart-check me-1"></i> I understand the risk, proceed to order anyway &rarr;
                 </button>
             </div>
+
         </div>
     </div>
 </div>
@@ -286,11 +330,26 @@ function decrementQty() {
     updatePriceDisplay(val);
 }
 
+let detailWarnModalInstance = null;
 function showDetailWarningModal() {
     const modalEl = document.getElementById('detailAllergenModal');
     if (modalEl) {
-        const modal = new bootstrap.Modal(modalEl);
-        modal.show();
+        detailWarnModalInstance = new bootstrap.Modal(modalEl);
+        detailWarnModalInstance.show();
+    }
+}
+
+function focusIngredients() {
+    if (detailWarnModalInstance) {
+        detailWarnModalInstance.hide();
+    }
+    const ingEl = document.getElementById('ingredientsSection');
+    if (ingEl) {
+        ingEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        ingEl.classList.add('border-danger', 'shadow');
+        setTimeout(() => {
+            ingEl.classList.remove('border-danger', 'shadow');
+        }, 2500);
     }
 }
 </script>

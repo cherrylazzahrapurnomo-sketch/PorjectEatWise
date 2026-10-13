@@ -358,3 +358,88 @@ function get_allergen_emoji($allergen_name) {
     }
 }
 
+/**
+ * Return detailed ingredients list for a dish
+ */
+function get_food_ingredients($food_id) {
+    $ingredients_map = [
+        1 => ['Organic Chicken Breast', 'Fresh Olive Oil', 'Mixed Greens', 'Rosemary', 'Crushed Garlic', 'Sea Salt', 'Lemon Zest'],
+        2 => ['Tenderloin Beef', 'Roasted Baby Potatoes', 'Asparagus', 'Rosemary', 'Grass-Fed Butter', 'Black Pepper', 'Sea Salt'],
+        3 => ['Organic Red & White Quinoa', 'Hass Avocado', 'Cherry Tomatoes', 'Crisp Cucumber', 'Fresh Cilantro', 'Lime Dressing', 'Chia Seeds'],
+        4 => ['Skinless Chicken Fillet', 'Steamed Brown Rice', 'Steamed Broccoli', 'Edamame', 'Sesame Oil', 'Low-Sodium Soy', 'Toasted Sesame'],
+        5 => ['Crisp Romaine Lettuce', 'Baby Kale', 'Cherry Tomatoes', 'English Cucumber', 'Shredded Carrots', 'Extra Virgin Olive Oil', 'Balsamic Glaze'],
+        6 => ['Grilled Chicken Strips', 'Garden Lettuce', 'Vine Tomatoes', 'Cucumber', 'Avocado', 'Greek Yogurt Herb Dressing'],
+        7 => ['Lean Ground Beef Patty', 'Whole Grain Brioche', 'Crisp Romaine Lettuce', 'Sliced Tomato', 'Caramelized Onion', 'Dijon Mustard'],
+        8 => ['Fresh Vegetable Broth', 'Carrots', 'Diced Celery', 'Zucchini', 'Baby Spinach', 'Cannellini Beans', 'Fresh Thyme'],
+        9 => ['Fresh Sea Bass Fillet', 'Steamed Green Beans', 'Cherry Tomatoes', 'Lemon Herbs', 'Extra Virgin Olive Oil', 'Garlic Butter'],
+        10 => ['Rolled Whole Oats', 'Almond Milk', 'Fresh Blueberries', 'Sliced Strawberries', 'Ripe Banana', 'Chia Seeds', 'Wildflower Honey']
+    ];
+
+    $id = (int)$food_id;
+    return $ingredients_map[$id] ?? ['Fresh Organic Vegetables', 'Virgin Olive Oil', 'Natural Herbs', 'Sea Salt'];
+}
+
+/**
+ * Return category summary and examples for allergen warning matching Image 1
+ */
+function get_allergen_warning_info($allergens_str) {
+    $lower = strtolower((string)$allergens_str);
+    if (strpos($lower, 'fish') !== false || strpos($lower, 'shrimp') !== false || strpos($lower, 'shellfish') !== false || strpos($lower, 'crab') !== false || strpos($lower, 'squid') !== false || strpos($lower, 'octopus') !== false) {
+        return [
+            'category' => 'Seafood',
+            'detected' => 'Seafood Detected',
+            'examples' => 'Shrimp, Fish, Oyster Sauce',
+            'icon_type' => 'shrimp'
+        ];
+    } elseif (strpos($lower, 'milk') !== false) {
+        return [
+            'category' => 'Dairy',
+            'detected' => 'Dairy Detected',
+            'examples' => 'Cow Milk, Butter, Cream, Cheese',
+            'icon_type' => 'milk'
+        ];
+    } elseif (strpos($lower, 'peanut') !== false) {
+        return [
+            'category' => 'Nuts',
+            'detected' => 'Nuts Detected',
+            'examples' => 'Peanuts, Peanut Oil, Tree Nuts',
+            'icon_type' => 'peanuts'
+        ];
+    } elseif (strpos($lower, 'egg') !== false) {
+        return [
+            'category' => 'Egg',
+            'detected' => 'Egg Detected',
+            'examples' => 'Whole Egg, Egg Whites, Mayonnaise',
+            'icon_type' => 'egg'
+        ];
+    } elseif (strpos($lower, 'soy') !== false) {
+        return [
+            'category' => 'Soy',
+            'detected' => 'Soy Detected',
+            'examples' => 'Soybeans, Soy Sauce, Tofu',
+            'icon_type' => 'soy'
+        ];
+    } else {
+        return [
+            'category' => !empty($allergens_str) ? $allergens_str : 'Specific Ingredients',
+            'detected' => (!empty($allergens_str) ? ucfirst($allergens_str) : 'Allergen') . ' Detected',
+            'examples' => !empty($allergens_str) ? $allergens_str : 'Potential Allergenic Ingredients',
+            'icon_type' => 'generic'
+        ];
+    }
+}
+
+/**
+ * Return EatWise brand logo using vector1.png
+ */
+function get_brand_leaf_svg($width = 36, $height = 36) {
+    $w = (int)$width;
+    $h = (int)$height;
+    return '<img src="vector1.png" alt="EatWise Logo" class="brand-leaf-svg brand-logo-img" width="' . $w . '" height="' . $h . '" style="width:' . $w . 'px;height:' . $h . 'px;object-fit:contain;display:inline-block;vertical-align:middle;">';
+}
+
+function get_brand_logo($width = 36, $height = 36) {
+    return get_brand_leaf_svg($width, $height);
+}
+
+

@@ -82,8 +82,8 @@ require_once __DIR__ . '/navbar.php';
         <div class="col-md-6 col-lg-5">
             <div class="card border-0 shadow-lg rounded-4 p-4 p-sm-5 bg-white">
                 <div class="text-center mb-4">
-                    <span class="d-inline-flex align-items-center justify-content-center rounded-3 bg-maroon-subtle text-maroon p-2 fs-3 mb-2" style="width: 54px; height: 54px;">
-                        <i class="bi bi-flower1"></i>
+                    <span class="d-inline-flex align-items-center justify-content-center mb-2">
+                        <?= get_brand_leaf_svg(46, 46) ?>
                     </span>
                     <h3 class="fw-bold text-maroon font-playfair mt-2">Create Account</h3>
                     <p class="text-muted small">Begin your wholesome healthy lifestyle journey with EatWise.</p>

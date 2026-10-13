@@ -92,8 +92,8 @@ require_once __DIR__ . '/navbar.php';
             <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 bg-white">
 
                 <div class="text-center mb-4">
-                    <span class="brand-leaf-icon fs-3 mb-2" style="width: 48px; height: 48px;">
-                        <i class="bi bi-shield-check"></i>
+                    <span class="d-inline-flex align-items-center justify-content-center mb-2">
+                        <?= get_brand_leaf_svg(46, 46) ?>
                     </span>
                     <h2 class="fw-bold text-maroon font-playfair mt-2">Allergy &amp; Dietary Preferences</h2>
                     <p class="text-muted small mx-auto" style="max-width: 520px;">

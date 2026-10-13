@@ -6,10 +6,8 @@
         <div class="row g-4 mb-4">
             <div class="col-lg-5 col-md-6">
                 <a class="d-inline-flex align-items-center gap-2 text-decoration-none text-maroon fw-bold fs-3 mb-3" href="home.php">
-                    <span class="d-inline-flex align-items-center justify-content-center rounded-3 bg-maroon text-white p-2" style="width:36px;height:36px;">
-                        <i class="bi bi-flower1"></i>
-                    </span>
-                    <span class="font-playfair">EatWise</span>
+                    <?= get_brand_leaf_svg(36, 36) ?>
+                    <span class="font-playfair text-maroon">EatWise</span>
                 </a>
                 <p class="text-muted small mt-1 pe-lg-4">
                     EatWise provides nutritious, wholesome, and delicious meals customized to your personal dietary needs and allergen preferences. Good food, smart choices.

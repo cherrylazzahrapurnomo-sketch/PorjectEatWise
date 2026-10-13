@@ -195,8 +195,8 @@ require_once __DIR__ . '/navbar.php';
                                 </div>
                                 
                                 <div class="d-flex gap-2">
-                                    <a href="detail.php?id=<?= $food['id'] ?>" class="btn btn-sm btn-outline-secondary rounded-pill px-3">
-                                        Details
+                                    <a href="detail.php?id=<?= $food['id'] ?>" class="btn-ew-outline-detail" title="View Meal Details">
+                                        Detail
                                     </a>
                                     
                                     <form method="POST" action="catagory.php<?= $selected_cat_id > 0 ? '?category=' . $selected_cat_id : '' ?>" id="catForm_<?= $food['id'] ?>" class="m-0">
@@ -204,9 +204,11 @@ require_once __DIR__ . '/navbar.php';
                                         <input type="hidden" name="food_id" value="<?= $food['id'] ?>">
                                         <input type="hidden" name="qty" value="1">
                                         
-                                        <?php if ($food['has_allergy_warning']): ?>
+                                        <?php if ($food['has_allergy_warning']): 
+                                            $warn_info = get_allergen_warning_info($food['conflicting_allergens']);
+                                        ?>
                                             <button type="button" class="btn btn-sm btn-ew-primary rounded-pill px-3" 
-                                                    onclick="triggerCatWarning(<?= $food['id'] ?>, '<?= addslashes(htmlspecialchars($food['food_name'])) ?>', '<?= addslashes(htmlspecialchars($food['conflicting_allergens'])) ?>')">
+                                                    onclick="triggerCatWarning(<?= $food['id'] ?>, '<?= addslashes(htmlspecialchars($food['food_name'])) ?>', '<?= addslashes(htmlspecialchars($food['conflicting_allergens'])) ?>', '<?= addslashes($warn_info['category']) ?>', '<?= addslashes($warn_info['detected']) ?>', '<?= addslashes($warn_info['examples']) ?>')">
                                                 <i class="bi bi-cart-plus me-1"></i> Order
                                             </button>
                                         <?php else: ?>
@@ -226,39 +228,65 @@ require_once __DIR__ . '/navbar.php';
 
 </div>
 
-<!-- ALLERGEN VERIFICATION MODAL -->
+<!-- ALLERGEN VERIFICATION MODAL (MATCHING IMAGE 1 DESIGN) -->
 <div class="modal fade" id="catAllergenModal" tabindex="-1" aria-labelledby="catAllergenModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0 rounded-4 shadow-lg overflow-hidden">
-            <div class="modal-header border-0 bg-maroon-subtle pb-0">
-                <div class="d-flex align-items-center">
-                    <span class="rounded-circle bg-maroon text-white p-2 d-inline-flex align-items-center justify-content-center me-3" style="width: 44px; height: 44px;">
-                        <i class="bi bi-exclamation-triangle-fill fs-5"></i>
-                    </span>
-                    <div>
-                        <h5 class="modal-title fw-bold text-maroon font-playfair mb-0" id="catAllergenModalLabel">Allergen Safety Warning</h5>
-                        <small class="text-maroon">Precaution Verification</small>
-                    </div>
+    <div class="modal-dialog modal-dialog-centered ew-warn-dialog">
+        <div class="modal-content ew-warn-card">
+            
+            <!-- Red Warning Triangle Icon -->
+            <div class="ew-warn-triangle-icon">
+                <svg width="68" height="60" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L1 21H23L12 2Z" fill="#FF1E1E"/>
+                    <path d="M12 8.5V13.5" stroke="#441715" stroke-width="2.4" stroke-linecap="round"/>
+                    <circle cx="12" cy="17.2" r="1.3" fill="#441715"/>
+                </svg>
+            </div>
+
+            <!-- Modal Heading in Playfair Display Red -->
+            <h3 class="ew-warn-title" id="catAllergenModalLabel">Allergen Warning</h3>
+
+            <!-- Centered Subtext (3 lines) -->
+            <p class="ew-warn-subtext">
+                This Food Contains <span id="catWarnCategoryText">Seafood</span><br>
+                (According To Our Ingredient Data),<br>
+                Which Matches Your Allergen Preference.
+            </p>
+
+            <!-- Detected Box with Allergen Icon -->
+            <div class="ew-warn-detected-box">
+                <div class="ew-warn-icon-wrap me-3">
+                    <svg width="46" height="46" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M48 16 C 42 12, 34 12, 28 16 C 22 20, 18 28, 20 36 C 22 44, 28 50, 36 54 C 38 55, 42 56, 40 52 C 38 48, 34 46, 32 42 C 28 36, 30 28, 36 24 C 42 20, 48 22, 52 26 C 54 28, 56 26, 54 24 C 52 20, 50 18, 48 16 Z" fill="#E8613A"/>
+                        <path d="M 38 20 C 34 22, 32 26, 32 30" stroke="#FF8A65" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M 34 26 C 30 30, 28 36, 30 40" stroke="#FF8A65" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M 44 14 C 48 10, 54 8, 58 8" stroke="#E8613A" stroke-width="1.5" stroke-linecap="round"/>
+                        <circle cx="44" cy="18" r="2" fill="#2E1C14"/>
+                        <path d="M 38 52 C 40 56, 44 58, 48 56 C 44 54, 42 50, 40 48 Z" fill="#D34B22"/>
+                    </svg>
                 </div>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body p-4">
-                <p class="mb-3 text-dark">
-                    The dish <strong id="catWarnFoodTitle">...</strong> contains 
-                    <strong id="catWarnAllergenList" class="text-maroon">...</strong>, which is currently flagged in your allergy profile.
-                </p>
-                <div class="alert alert-danger bg-maroon-subtle border-maroon text-maroon p-3 rounded-3 mb-0 small">
-                    <i class="bi bi-info-circle-fill me-1"></i> Are you sure you wish to proceed and order this item anyway?
+                <div>
+                    <h5 class="ew-warn-detected-title mb-1" id="catWarnDetectedTitle">Seafood Detected</h5>
+                    <small class="ew-warn-detected-sub" id="catWarnDetectedExamples">E.G. Shrimp, Fish, Oyster Sauce</small>
                 </div>
             </div>
-            <div class="modal-footer border-0 pt-0 px-4 pb-4">
-                <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">
-                    <i class="bi bi-x-circle me-1"></i> Cancel
-                </button>
-                <button type="button" class="btn btn-ew-primary rounded-pill px-4" id="catConfirmBtn">
-                    <i class="bi bi-cart-check-fill me-1"></i> Yes, Proceed Anyway
+
+            <!-- Action Buttons matching Image 1 -->
+            <div class="d-flex flex-column gap-2 w-100">
+                <a href="#" id="catWarnViewIngredientsLink" class="btn btn-ew-warn-primary py-3 w-100">
+                    View Ingredients
+                </a>
+                <button type="button" class="btn btn-ew-warn-secondary py-3 w-100" data-bs-dismiss="modal">
+                    Choose Another Food
                 </button>
             </div>
+
+            <!-- Subtle Verification Link to Proceed Anyway -->
+            <div class="text-center mt-3">
+                <button type="button" id="catConfirmBtn" class="btn btn-link text-white-50 text-decoration-none small p-0 opacity-75">
+                    <i class="bi bi-cart-check me-1"></i> I understand the risk, proceed to order anyway &rarr;
+                </button>
+            </div>
+
         </div>
     </div>
 </div>
@@ -266,10 +294,12 @@ require_once __DIR__ . '/navbar.php';
 <script>
 let catTargetFormId = null;
 
-function triggerCatWarning(foodId, foodName, allergens) {
+function triggerCatWarning(foodId, foodName, allergens, category, detectedTitle, detectedExamples) {
     catTargetFormId = 'catForm_' + foodId;
-    document.getElementById('catWarnFoodTitle').innerText = foodName;
-    document.getElementById('catWarnAllergenList').innerText = allergens;
+    document.getElementById('catWarnCategoryText').innerText = category || 'Allergen Ingredients';
+    document.getElementById('catWarnDetectedTitle').innerText = detectedTitle || (allergens + ' Detected');
+    document.getElementById('catWarnDetectedExamples').innerText = 'E.G. ' + (detectedExamples || allergens);
+    document.getElementById('catWarnViewIngredientsLink').href = 'detail.php?id=' + foodId + '&from=warn';
     
     const warningModal = new bootstrap.Modal(document.getElementById('catAllergenModal'));
     warningModal.show();

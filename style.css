@@ -710,3 +710,169 @@ h2,
 .ew-footer a:hover {
     color: var(--ew-secondary);
 }
+
+/* ==========================================================================
+   ALLERGEN WARNING MODAL (MATCHING IMAGE 1 DESIGN)
+   ========================================================================== */
+.ew-warn-dialog {
+    max-width: 530px;
+    margin: 1.75rem auto;
+}
+
+.ew-warn-card {
+    background-color: #441715 !important; /* Deep dark wine maroon matching Image 1 */
+    border: none !important;
+    border-radius: 24px !important;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.65) !important;
+    padding: 38px 32px 32px 32px !important;
+    text-align: center;
+    color: #ded5cb;
+    position: relative;
+    overflow: hidden;
+}
+
+.ew-warn-triangle-icon {
+    display: inline-block;
+    margin-bottom: 14px;
+}
+
+.ew-warn-title {
+    font-family: 'Playfair Display', serif;
+    color: #ff1e1e !important; /* Vibrant Red matching Image 1 */
+    font-size: 1.85rem;
+    font-weight: 700;
+    margin-bottom: 14px;
+    letter-spacing: -0.2px;
+}
+
+.ew-warn-subtext {
+    color: #ded5cb;
+    font-size: 0.98rem;
+    line-height: 1.6;
+    margin-bottom: 24px;
+    font-weight: 400;
+}
+
+.ew-warn-detected-box {
+    background-color: rgba(0, 0, 0, 0.28);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 16px;
+    padding: 16px 22px;
+    margin: 0 auto 28px auto;
+    max-width: 440px;
+    display: flex;
+    align-items: center;
+    text-align: left;
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+.ew-warn-icon-wrap {
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.ew-warn-detected-title {
+    color: #ff1e1e; /* Vibrant Red */
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 3px;
+}
+
+.ew-warn-detected-sub {
+    color: #c7b8aa;
+    font-size: 0.82rem;
+    display: block;
+}
+
+/* Primary Button: View Ingredients (Bright Red Pill) */
+.btn-ew-warn-primary {
+    background-color: #ff0000 !important;
+    border-color: #ff0000 !important;
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    font-size: 1rem !important;
+    border-radius: 50px !important;
+    padding: 14px 24px !important;
+    box-shadow: 0 4px 16px rgba(255, 0, 0, 0.35);
+    transition: all 0.2s ease;
+    text-decoration: none;
+    display: inline-block;
+    border: none;
+}
+
+.btn-ew-warn-primary:hover,
+.btn-ew-warn-primary:focus {
+    background-color: #e00000 !important;
+    border-color: #e00000 !important;
+    color: #ffffff !important;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 0, 0, 0.45);
+}
+
+/* Secondary Button: Choose Another Food (Cream Pill, Red Text) */
+.btn-ew-warn-secondary {
+    background-color: #f1ede3 !important; /* Soft cream */
+    border-color: #f1ede3 !important;
+    color: #d60000 !important; /* Dark bold red text */
+    font-weight: 700 !important;
+    font-size: 1rem !important;
+    border-radius: 50px !important;
+    padding: 14px 24px !important;
+    transition: all 0.2s ease;
+    border: none;
+}
+
+.btn-ew-warn-secondary:hover,
+.btn-ew-warn-secondary:focus {
+    background-color: #e6dfd2 !important;
+    color: #b50000 !important;
+    transform: translateY(-2px);
+}
+
+/* BRAND LEAF LOGO (vector1.png) */
+.brand-leaf-svg,
+.brand-logo-img {
+    display: inline-block;
+    vertical-align: middle;
+    flex-shrink: 0;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15));
+}
+
+.brand-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.65rem;
+    font-weight: 700;
+    color: #ffffff !important;
+    text-decoration: none;
+}
+
+/* DETAIL BUTTON ON FOOD CARDS */
+.btn-ew-outline-detail {
+    background-color: transparent;
+    border: 1.5px solid var(--ew-secondary);
+    color: var(--ew-secondary);
+    font-weight: 600;
+    font-size: 0.82rem;
+    border-radius: 30px;
+    padding: 6px 18px;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-ew-outline-detail:hover {
+    background-color: var(--ew-secondary);
+    color: #ffffff !important;
+    border-color: var(--ew-secondary);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(117, 46, 42, 0.2);
+}

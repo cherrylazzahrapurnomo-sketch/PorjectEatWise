@@ -29,6 +29,9 @@ $flash = get_flash();
     <!-- Bootstrap Icons 1.11.3 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
 
+    <!-- EatWise Favicon -->
+    <link rel="icon" type="image/png" href="vector1.png">
+
     <!-- EatWise Custom CSS -->
     <link rel="stylesheet" href="style.css">
 </head>
@@ -40,8 +43,8 @@ $flash = get_flash();
     <nav class="navbar navbar-expand-lg navbar-dark ew-navbar">
         <div class="container">
             <a class="navbar-brand brand-logo" href="home.php">
-                <span class="brand-leaf-icon"><i class="bi bi-flower1"></i></span>
-                <span class="font-playfair">EatWise</span>
+                <?= get_brand_leaf_svg(36, 36) ?>
+                <span class="font-playfair text-white">EatWise</span>
             </a>
 
             <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarEatWise" aria-controls="navbarEatWise" aria-expanded="false" aria-label="Toggle navigation">
