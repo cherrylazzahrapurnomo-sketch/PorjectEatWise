@@ -2192,3 +2192,1077 @@ body {
     }
 }
 
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f7f4eb;
+    color: #242424;
+    min-height: 100vh;
+}
+
+/* NAVBAR */
+.navbar {
+    height: 32px;
+    margin-top: 16px;
+    padding: 0 max(calc((100% - 660px) / 2), 20px);
+    background: #80332f;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: #f5e9df;
+    text-decoration: none;
+    font-family: Georgia, serif;
+    font-size: 16px;
+}
+
+.leaf {
+    font-size: 20px;
+}
+
+.nav-menu {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+.nav-menu a {
+    color: #e8d8d5;
+    text-decoration: none;
+    font-family: Georgia, serif;
+    font-size: 8px;
+}
+
+.nav-menu a:hover {
+    color: white;
+}
+
+/* MAIN */
+.container {
+    max-width: 660px;
+    margin: 18px auto 40px;
+    padding: 0 8px;
+}
+
+.back-link {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 15px;
+    color: #333;
+    text-decoration: none;
+    font-size: 28px;
+    line-height: 25px;
+}
+
+.page-title {
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+/* PAYMENT CARD */
+.payment-card {
+    background: #f8f6ee;
+    border: 1px solid #dcd8cd;
+    border-radius: 12px;
+    padding: 0 11px;
+    box-shadow: 0 1px 3px #0000000a;
+}
+
+/* EACH ROW */
+.payment-row {
+    min-height: 42px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 6px 6px;
+    border-bottom: 1px solid #dedbd2;
+    cursor: pointer;
+}
+
+.payment-row:last-child {
+    border-bottom: none;
+}
+
+.payment-row input[type="radio"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    border: 1.5px solid #222;
+    border-radius: 50%;
+    background: transparent;
+    cursor: pointer;
+    position: relative;
+}
+
+.payment-row input[type="radio"]:checked {
+    border: 2px solid #111;
+}
+
+.payment-row input[type="radio"]:checked::after {
+    content: "";
+    position: absolute;
+    inset: 2px;
+    border-radius: 50%;
+    background: #111;
+}
+
+/* PAYMENT ICONS */
+.payment-icon {
+    width: 17px;
+    height: 17px;
+    flex-shrink: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    font-weight: bold;
+    color: #111;
+}
+
+.gopay {
+    background: #00bfd8;
+    color: white;
+    border-radius: 50%;
+}
+
+.ovo {
+    color: white;
+    background: #7860ac;
+    border: 3px solid #7860ac;
+    outline: 1px solid #7860ac;
+    outline-offset: -1px;
+    border-radius: 50%;
+}
+
+.dana {
+    color: white;
+    background: #168cf0;
+    border-radius: 5px;
+}
+
+.paylater {
+    font-size: 19px;
+}
+
+.virtual,
+.bank,
+.cod {
+    font-size: 18px;
+}
+
+/* TEXT */
+.payment-info {
+    min-width: 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.payment-name {
+    font-size: 10px;
+    color: #292929;
+}
+
+.payment-info small {
+    color: #a6a39b;
+    font-size: 8px;
+    line-height: 1.3;
+}
+
+/* PROMO & ARROW */
+.promo {
+    color: #d78d82;
+    border: 1px solid #e4a39a;
+    border-radius: 10px;
+    padding: 2px 5px;
+    font-size: 7px;
+    white-space: nowrap;
+}
+
+.arrow {
+    color: #151515;
+    font-size: 28px;
+    line-height: 20px;
+    margin-left: 2px;
+}
+
+.card-number {
+    color: #99958c;
+    font-size: 9px;
+    white-space: nowrap;
+}
+
+.card-check,
+.selected-check {
+    color: white;
+    background: #c7352b;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+}
+
+.expand-button {
+    border: none;
+    background: transparent;
+    font-size: 22px;
+    cursor: pointer;
+    line-height: 18px;
+    color: #333;
+    margin-left: 0;
+}
+
+/* SAVED BANK CARD */
+.card-section {
+    border-bottom: 1px solid #dedbd2;
+}
+
+.card-section > .payment-row {
+    border-bottom: 1px solid #dedbd2;
+}
+
+.saved-card {
+    min-height: 41px;
+    padding: 7px 7px 7px 76px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.bank-name {
+    flex: 1;
+    font-size: 10px;
+}
+
+.mastercard {
+    display: flex;
+    align-items: center;
+    width: 18px;
+}
+
+.mastercard i,
+.mastercard b {
+    display: block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.mastercard i {
+    background: #eb1d37;
+    margin-right: -5px;
+}
+
+.mastercard b {
+    background: #f7a51a;
+}
+
+/* MESSAGE */
+.message {
+    background: #e8f1e3;
+    color: #4c6946;
+    padding: 10px;
+    margin: 0 0 12px;
+    border-radius: 6px;
+    font-size: 12px;
+}
+
+/* CONTINUE BUTTON */
+.continue-button {
+    display: block;
+    width: 100%;
+    margin-top: 18px;
+    padding: 12px;
+    border: none;
+    border-radius: 7px;
+    background: #80332f;
+    color: white;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.continue-button:hover {
+    background: #692824;
+}
+
+/* MOBILE */
+@media (max-width: 600px) {
+    .navbar {
+        padding: 0 12px;
+    }
+
+    .nav-menu {
+        gap: 10px;
+    }
+
+    .nav-menu a {
+        font-size: 7px;
+    }
+
+    .logo {
+        font-size: 14px;
+    }
+
+    .payment-row {
+        gap: 8px;
+    }
+
+    .promo {
+        white-space: normal;
+        text-align: center;
+        max-width: 100px;
+    }
+
+    .saved-card {
+        padding-left: 50px;
+    }
+}
+
+@media (max-width: 390px) {
+    .nav-menu {
+        gap: 7px;
+    }
+
+    .nav-menu a {
+        font-size: 6px;
+    }
+
+    .promo {
+        display: none;
+    }
+}
+/* ==============================
+   RESET
+============================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f7f4eb;
+    color: #171717;
+}
+
+/* ==============================
+   PAGE
+============================== */
+
+.status-page {
+    position: relative;
+    min-height: 100vh;
+    padding: 25px 15px 15px;
+    background: #f7f4eb;
+    border: 3px solid #159bff;
+}
+
+.status-label {
+    position: absolute;
+    top: -24px;
+    left: 0;
+    color: #91c9f5;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* ==============================
+   MAIN CONTAINER
+============================== */
+
+.success-container {
+    width: 100%;
+    max-width: 570px;
+    margin: 75px auto 0;
+    text-align: center;
+}
+
+/* ==============================
+   SUCCESS ILLUSTRATION
+============================== */
+
+.success-illustration {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 10px;
+}
+
+.success-circle {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #505337;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.checkmark {
+    width: 13px;
+    height: 24px;
+    border-right: 4px solid #fff;
+    border-bottom: 4px solid #fff;
+    transform: rotate(45deg);
+    margin-top: -5px;
+}
+
+/* ==============================
+   CONFETTI
+============================== */
+
+.confetti {
+    width: 19px;
+    height: 35px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.confetti span {
+    width: 12px;
+    height: 3px;
+    display: block;
+    border-radius: 4px;
+}
+
+.confetti span:nth-child(1) {
+    background: #ff7d91;
+    transform: rotate(25deg);
+}
+
+.confetti span:nth-child(2) {
+    background: #73d8ed;
+    transform: rotate(-25deg);
+    margin-left: 5px;
+}
+
+.confetti span:nth-child(3) {
+    background: #d8a6ed;
+    transform: rotate(25deg);
+}
+
+.confetti span:nth-child(4) {
+    background: #74c9f5;
+    transform: rotate(-25deg);
+    margin-left: 4px;
+}
+
+.confetti span:nth-child(5) {
+    background: #ff7d91;
+    transform: rotate(20deg);
+}
+
+/* ==============================
+   SUCCESS TEXT
+============================== */
+
+.success-container h1 {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 7px;
+}
+
+.success-description {
+    color: #8e8b83;
+    font-size: 9px;
+    line-height: 1.8;
+}
+
+/* ==============================
+   TRANSACTION CARD
+============================== */
+
+.transaction-card {
+    width: 100%;
+    min-height: 56px;
+    margin-top: 38px;
+    padding: 11px 15px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: left;
+
+    background: #f5f0df;
+    border: 1px solid #e2dcc9;
+    border-radius: 9px;
+}
+
+.transaction-info,
+.transaction-total {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.transaction-total {
+    text-align: left;
+}
+
+.info-label {
+    color: #858176;
+    font-size: 10px;
+}
+
+.transaction-card strong {
+    color: #191919;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+/* ==============================
+   ORDER DETAILS BUTTON
+============================== */
+
+.details-button {
+    width: 100%;
+    min-height: 32px;
+    margin-top: 35px;
+    padding: 10px 15px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: #505337;
+    color: #fff;
+
+    border-radius: 30px;
+    text-decoration: none;
+
+    font-size: 11px;
+    font-weight: 600;
+
+    transition: background 0.2s;
+}
+
+.details-button:hover {
+    background: #41442c;
+}
+
+/* ==============================
+   RESPONSIVE
+============================== */
+
+@media (max-width: 600px) {
+    .status-page {
+        padding: 20px 15px;
+    }
+
+    .success-container {
+        margin-top: 65px;
+    }
+
+    .transaction-card {
+        margin-top: 30px;
+        padding: 12px;
+    }
+
+    .details-button {
+        margin-top: 25px;
+    }
+}
+
+/* ORDER PICKUP */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background-color: #f8f4ea;
+    color: #34352d;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+}
+
+.checkout-container {
+    max-width: 1160px;
+    padding-top: 18px;
+    padding-bottom: 30px;
+}
+
+/* NAVBAR */
+.navbar-eatwise {
+    background-color: #7b302d;
+    min-height: 52px;
+}
+
+.navbar-brand {
+    color: #f8eee0 !important;
+    font-family: Georgia, serif;
+    font-size: 17px;
+}
+
+.logo-leaf {
+    font-size: 23px;
+    margin-right: 5px;
+}
+
+.navbar-nav {
+    gap: 12px;
+}
+
+.navbar-eatwise .nav-link {
+    color: #e8d4c8;
+    font-size: 10px;
+    padding: 10px;
+}
+
+.navbar-eatwise .nav-link:hover,
+.navbar-eatwise .logout {
+    color: #f0a29a;
+}
+
+/* DELIVERY CARD */
+.delivery-card,
+.order-card,
+.summary-card,
+.confirm-card {
+    border: 1px solid #d8cfbb;
+    border-radius: 9px;
+    overflow: hidden;
+}
+
+.delivery-card,
+.order-card,
+.summary-card {
+    background-color: #fffaf0;
+}
+
+.delivery-tabs {
+    display: flex;
+    background-color: #d2cabb;
+    padding: 4px;
+    border-radius: 9px;
+    gap: 8px;
+}
+
+.delivery-tab {
+    width: 50%;
+    padding: 8px;
+    border: none;
+    border-radius: 10px;
+    background: transparent;
+    color: #466e32;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.delivery-tab.active {
+    background-color: #f4ecd9;
+    box-shadow: 0 0 0 1px #d6cdbb;
+}
+
+.restaurant-preview {
+    padding: 12px 16px;
+}
+
+.restaurant-title {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.restaurant-title strong {
+    font-size: 12px;
+}
+
+.restaurant-title small {
+    color: #79776c;
+    font-size: 10px;
+}
+
+.address {
+    margin: 5px 0 10px 22px;
+    color: #6b695f;
+    font-size: 10px;
+}
+
+.pickup-label {
+    padding: 5px 10px;
+    background-color: #c4e8b7;
+    color: #315b2a;
+    border-radius: 4px;
+    font-size: 10px;
+}
+
+.pickup-time {
+    color: #688a50;
+    font-size: 10px;
+}
+
+/* ORDER CARD */
+.section-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 12px;
+}
+
+.section-heading strong {
+    font-size: 13px;
+    margin-left: 5px;
+}
+
+.small-link {
+    color: #8b5a42;
+    font-size: 9px;
+    text-decoration: none;
+}
+
+.order-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-top: 1px solid #d8cfbb;
+}
+
+.food-image {
+    width: 62px;
+    height: 62px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid #d8cfbb;
+    background-color: #e7dfce;
+}
+
+.food-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.food-name {
+    font-weight: bold;
+    font-size: 13px;
+}
+
+.food-name small {
+    color: #77766e;
+    font-size: 9px;
+    font-weight: normal;
+}
+
+.food-info p {
+    margin: 5px 0 0;
+    color: #6a675f;
+}
+
+.quantity-control {
+    text-align: center;
+}
+
+.quantity-control > small {
+    display: block;
+    margin-bottom: 4px;
+    color: #8b8578;
+    font-size: 9px;
+}
+
+.quantity-box {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 3px 6px;
+    border: 1px solid #d1c7b4;
+    border-radius: 20px;
+    background-color: #fffdf7;
+}
+
+.quantity-box button {
+    padding: 0 2px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.quantity-box button:hover {
+    color: #8c322d;
+}
+
+/* SUMMARY */
+.summary-card {
+    padding: 10px;
+    border-left: 4px solid #1686df;
+}
+
+.summary-card h6 {
+    margin: 0 0 8px;
+    font-size: 14px;
+    font-family: Georgia, serif;
+}
+
+.summary-inner {
+    background: #fffdf8;
+    border: 1px solid #cfc5b3;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 5px;
+    font-size: 10px;
+}
+
+.summary-row strong {
+    text-align: right;
+    font-size: 10px;
+}
+
+.calories {
+    color: #b33e35;
+}
+
+.summary-inner hr {
+    margin: 6px 0;
+    border-color: #d9d0bf;
+}
+
+.total-payment {
+    margin-bottom: 0;
+    font-weight: bold;
+}
+
+/* CONFIRM ORDER */
+.confirm-card {
+    padding: 12px;
+    background-color: #eae2cf;
+}
+
+.confirm-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 12px;
+}
+
+.leaf-icon {
+    font-size: 28px;
+}
+
+.confirm-header strong {
+    font-family: Georgia, serif;
+    font-size: 14px;
+}
+
+.confirm-header p {
+    margin: 2px 0 0;
+    color: #797568;
+    font-size: 10px;
+}
+
+.instruction-box {
+    padding: 12px;
+    background-color: #f8f2e6;
+    border-radius: 7px;
+}
+
+.instruction-box h6 {
+    margin: 0 0 10px;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+.instruction-box h6 i {
+    color: #518c41;
+    margin-right: 5px;
+}
+
+.instruction-message {
+    display: flex;
+    align-items: flex-start;
+    gap: 7px;
+    padding: 8px;
+    border-radius: 5px;
+    background-color: #a9d998;
+    color: #3d6333;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+.transaction-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin: 8px 0 14px;
+    padding: 10px;
+    background-color: #fbe8e6;
+    border: 1px solid #f0d7d2;
+    border-radius: 5px;
+}
+
+.transaction-box span {
+    display: block;
+    margin-bottom: 3px;
+    color: #81766d;
+}
+
+.transaction-box strong {
+    color: #b53938;
+    font-size: 15px;
+}
+
+.copy-btn {
+    padding: 6px 10px;
+    background-color: #fffaf7;
+    color: #b04a46;
+    border: 1px solid #ead4d0;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.copy-btn:hover {
+    background-color: #f5dcd7;
+}
+
+.restaurant-information h6 {
+    margin-bottom: 10px;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.restaurant-detail {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 12px;
+    padding-left: 4px;
+}
+
+.restaurant-detail > i {
+    color: #518c41;
+}
+
+.restaurant-detail strong {
+    font-size: 11px;
+}
+
+.restaurant-detail small {
+    display: inline;
+    margin-left: 4px;
+    color: #777568;
+    font-size: 9px;
+}
+
+.restaurant-detail p {
+    margin: 3px 0 0;
+    color: #777568;
+    font-size: 10px;
+}
+
+.open-time {
+    color: #6b8d54;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+.open-time i {
+    margin-right: 5px;
+}
+
+/* ACTION BUTTONS */
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.btn-confirm,
+.btn-back {
+    width: 100%;
+    padding: 9px;
+    border-radius: 25px;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+.btn-confirm {
+    background-color: #62201f;
+    color: white;
+}
+
+.btn-confirm:hover {
+    background-color: #82322f;
+    color: white;
+}
+
+.btn-back {
+    background-color: #fff;
+    color: #71332e;
+    border: 1px solid #e3dcd0;
+}
+
+.btn-back:hover {
+    background-color: #eee5d8;
+    color: #71332e;
+}
+
+/* RESPONSIVE */
+@media (max-width: 991px) {
+    .checkout-container {
+        padding: 15px;
+    }
+
+    .confirm-card {
+        margin-top: 3px;
+    }
+}
+
+@media (max-width: 576px) {
+    .navbar-nav {
+        gap: 0;
+    }
+
+    .order-item {
+        gap: 7px;
+    }
+
+    .food-image {
+        width: 52px;
+        height: 52px;
+    }
+
+    .food-name {
+        font-size: 11px;
+    }
+
+    .quantity-box {
+        gap: 6px;
+    }
+
+    .restaurant-detail small {
+        display: block;
+        margin: 3px 0;
+    }
+}
+
