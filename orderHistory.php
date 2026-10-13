@@ -1,445 +1,214 @@
+```php
+<?php
+session_start();
 
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap');
+$orders = [
+    [
+        "id" => "EW123456",
+        "name" => "Chicken Grill Bowl",
+        "image" => "assets/chicken-bowl.jpg",
+        "price" => 60000,
+        "calories" => 400,
+        "date" => "22 Apr 2026, 13:06",
+        "status" => "Shipped"
+    ],
+    [
+        "id" => "EW123456",
+        "name" => "Caesar Salad",
+        "image" => "assets/caesar-salad.jpg",
+        "price" => 45000,
+        "calories" => 200,
+        "date" => "22 Apr 2026, 13:06",
+        "status" => "Shipped"
+    ],
+    [
+        "id" => "EW060324",
+        "name" => "Oat Berries Meal",
+        "image" => "assets/oat-berries.jpg",
+        "price" => 35000,
+        "calories" => 150,
+        "date" => "13 Mar 2026, 15:06",
+        "status" => "Completed"
+    ]
+];
 
-:root {
-    --maroon: #7d2927;
-    --olive: #505338;
-    --cream: #f8f4e9;
-    --peach: #f9d9d0;
-    --border: #ded9cd;
-    --muted: #77756e;
-    --red: #d32f26;
+function e($value) {
+    return htmlspecialchars(
+        (string) $value,
+        ENT_QUOTES,
+        "UTF-8"
+    );
 }
 
-* {
-    box-sizing: border-box;
+function rupiah($amount) {
+    return "Rp " . number_format($amount, 0, ",", ".");
 }
 
-html {
-    min-height: 100%;
+/* FILTER STATUS */
+$allowedFilters = [
+    "All",
+    "Completed",
+    "Cancelled",
+    "Shipped"
+];
+
+$filter = $_GET["status"] ?? "All";
+
+if (!in_array($filter, $allowedFilters, true)) {
+    $filter = "All";
 }
 
-body {
-    margin: 0;
-    min-height: 100vh;
-    background: var(--peach);
-    color: #080808;
-    font-family: 'DM Sans', Arial, sans-serif;
-}
-
-/* MAIN PAGE */
-
-.app-container {
-    width: calc(100% - 10px);
-    max-width: 1200px;
-    min-height: 100vh;
-    margin: 0 auto;
-    background: var(--cream);
-}
-
-/* NAVBAR */
-
-.navbar {
-    width: 100%;
-    height: 37px;
-    padding: 0 6.2%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: var(--maroon);
-}
-
-.brand {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    color: #fff;
-    font-family: 'Playfair Display', Georgia, serif;
-    font-size: 18px;
-    text-decoration: none;
-    white-space: nowrap;
-}
-
-.brand-leaf {
-    width: 29px;
-    height: 25px;
-    flex-shrink: 0;
-}
-
-.nav-links {
-    display: flex;
-    align-items: center;
-    gap: 30px;
-}
-
-.nav-links a {
-    color: #fff7ef;
-    font-family: 'Playfair Display', Georgia, serif;
-    font-size: 8px;
-    text-decoration: none;
-    white-space: nowrap;
-}
-
-.nav-links a:hover {
-    opacity: 0.75;
-}
-
-.nav-links .logout {
-    color: #ff6969;
-}
-
-/* ORDER HISTORY CONTENT */
-
-.history-main {
-    padding: 14px 7.5% 35px;
-}
-
-.history-main h1 {
-    margin: 0 0 12px -3px;
-    font-family: 'Playfair Display', Georgia, serif;
-    font-size: 16px;
-    line-height: 1.4;
-    font-weight: 700;
-}
-
-/* FILTER TABS */
-
-.filter-tabs {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 24px;
-    margin-bottom: 10px;
-}
-
-.filter-tab {
-    min-width: 87px;
-    height: 28px;
-    padding: 0 16px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid #ded2c1;
-    border-radius: 20px;
-    background: #eee3d3;
-    color: #111;
-    font-size: 12px;
-    font-weight: 700;
-    text-decoration: none;
-    transition:
-        background 0.2s ease,
-        color 0.2s ease;
-}
-
-.filter-tab:hover {
-    background: #ded5c4;
-}
-
-.filter-tab.active {
-    background: var(--olive);
-    border-color: var(--olive);
-    color: #fff;
-}
-
-/* ORDER LIST */
-
-.order-list {
-    width: 100%;
-}
-
-.order-item {
-    width: 100%;
-    min-height: 89px;
-    padding: 9px 7px 8px 3px;
-    display: grid;
-    grid-template-columns: 64px minmax(150px, 1fr) 95px 100px 13px;
-    align-items: center;
-    column-gap: 12px;
-    border-bottom: 1px solid #e0dcd1;
-    color: inherit;
-    text-decoration: none;
-    transition: background 0.15s ease;
-}
-
-.order-item:hover {
-    background: rgba(225, 219, 205, 0.18);
-}
-
-/* FOOD IMAGE */
-
-.food-image {
-    width: 64px;
-    height: 64px;
-    overflow: hidden;
-    border-radius: 9px;
-    background: #e8e3d8;
-}
-
-.food-image img {
-    width: 100%;
-    height: 100%;
-    display: block;
-    object-fit: cover;
-}
-
-/* ORDER DETAILS */
-
-.order-info {
-    min-width: 0;
-    align-self: center;
-}
-
-.order-info h2 {
-    margin: 0 0 4px;
-    font-family: 'DM Sans', Arial, sans-serif;
-    font-size: 16px;
-    line-height: 1.25;
-    font-weight: 700;
-}
-
-.food-name {
-    margin: 0 0 7px;
-    font-family: 'Playfair Display', Georgia, serif;
-    font-size: 13px;
-    line-height: 1.3;
-}
-
-.order-date {
-    margin: 0;
-    color: #77756e;
-    font-size: 11px;
-    font-weight: 300;
-}
-
-/* STATUS BADGES */
-
-.order-status {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.status-badge {
-    min-width: 76px;
-    padding: 6px 8px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 700;
-    white-space: nowrap;
-}
-
-.status-badge.shipped {
-    background: #fae3a6;
-    color: #937019;
-}
-
-.status-badge.completed {
-    background: #a9f29c;
-    color: #27833c;
-}
-
-.status-badge.cancelled {
-    background: #f5c8c4;
-    color: #b52d27;
-}
-
-/* PRICE AND CALORIES */
-
-.order-summary {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-}
-
-.price {
-    font-size: 12px;
-    font-weight: 500;
-    white-space: nowrap;
-}
-
-.calories {
-    color: #d62920;
-    font-size: 11px;
-    font-weight: 400;
-    white-space: nowrap;
-}
-
-/* RIGHT ARROW */
-
-.order-arrow {
-    width: 12px;
-    height: 12px;
-    border-top: 2px solid #080808;
-    border-right: 2px solid #080808;
-    transform: rotate(45deg);
-    justify-self: center;
-}
-
-/* EMPTY STATE */
-
-.empty-state {
-    min-height: 100px;
-    padding: 24px 10px;
-    color: var(--muted);
-    font-size: 13px;
-}
-
-.empty-state a {
-    color: var(--maroon);
-    font-weight: 600;
-    text-decoration: none;
-}
-
-/* RESPONSIVE: TABLET */
-
-@media (max-width: 700px) {
-    .navbar {
-        height: auto;
-        min-height: 48px;
-        padding: 10px 4%;
-        align-items: flex-start;
-        flex-direction: column;
-        gap: 10px;
+$filteredOrders = array_filter(
+    $orders,
+    function ($order) use ($filter) {
+        return $filter === "All"
+            || $order["status"] === $filter;
     }
+);
+?>
 
-    .nav-links {
-        width: 100%;
-        justify-content: space-between;
-        gap: 8px;
-    }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    .nav-links a {
-        font-size: 8px;
-    }
+    <title>Order History | EatWise</title>
 
-    .history-main {
-        padding: 15px 5% 30px;
-    }
+    <!-- Gunakan nama CSS yang benar -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-    .filter-tabs {
-        gap: 9px;
-    }
+<div class="app-container">
 
-    .filter-tab {
-        min-width: 72px;
-        height: 28px;
-        padding: 0 12px;
-        font-size: 11px;
-    }
+    <!-- NAVBAR -->
+    <header class="navbar">
+        <a href="home.php" class="brand">
+            <svg class="brand-leaf"
+                 viewBox="0 0 60 50"
+                 aria-hidden="true">
+                <path
+                    d="M4 44C18 12 32 6 56 4C54 28 36 45 4 44Z"
+                    fill="#72844c"
+                />
+                <path
+                    d="M8 42L43 14"
+                    stroke="#b2b98a"
+                    stroke-width="1.5"
+                    fill="none"
+                />
+            </svg>
+            <span>EatWise</span>
+        </a>
 
-    .order-item {
-        grid-template-columns: 55px minmax(90px, 1fr) auto 12px;
-        column-gap: 9px;
-        min-height: 80px;
-        padding-right: 5px;
-    }
+        <nav class="nav-links">
+            <a href="home.php">HOME</a>
+            <a href="categories.php">CATEGORIES</a>
+            <a href="cart.php">CARTS</a>
+            <a href="profile.php">ACCOUNT</a>
+            <a href="login.php" class="logout">LOGOUT</a>
+        </nav>
+    </header>
 
-    .food-image {
-        width: 55px;
-        height: 58px;
-    }
+    <!-- MAIN CONTENT -->
+    <main class="history-main">
 
-    .order-info h2 {
-        font-size: 13px;
-    }
+        <h1>Order History</h1>
 
-    .food-name {
-        font-size: 12px;
-    }
+        <!-- FILTER TABS -->
+        <nav class="filter-tabs" aria-label="Filter order status">
+            <?php foreach ($allowedFilters as $status): ?>
+                <a
+                    href="orderHistory.php?status=<?= urlencode($status) ?>"
+                    class="filter-tab <?= $filter === $status ? 'active' : '' ?>"
+                    <?= $filter === $status ? 'aria-current="page"' : '' ?>
+                >
+                    <?= e($status) ?>
+                </a>
+            <?php endforeach; ?>
+        </nav>
 
-    .order-date {
-        font-size: 10px;
-    }
+        <!-- ORDER LIST -->
+        <section class="order-list">
 
-    .order-status {
-        grid-column: 3;
-        grid-row: 1;
-    }
+            <?php if (empty($filteredOrders)): ?>
 
-    .order-summary {
-        grid-column: 3;
-        grid-row: 1;
-        align-self: end;
-        padding-bottom: 1px;
-        gap: 5px;
-    }
+                <div class="empty-state">
+                    <p>
+                        No <?= e(strtolower($filter)) ?> orders found.
+                    </p>
 
-    .status-badge {
-        min-width: 0;
-        padding: 4px 6px;
-        font-size: 10px;
-        transform: translateY(-14px);
-    }
+                    <a href="orderHistory.php?status=All">
+                        View All Orders
+                    </a>
+                </div>
 
-    .price {
-        font-size: 10px;
-    }
+            <?php else: ?>
 
-    .calories {
-        font-size: 10px;
-    }
+                <?php foreach ($filteredOrders as $order): ?>
 
-    .order-arrow {
-        grid-column: 4;
-        grid-row: 1;
-    }
-}
+                    <a
+                        class="order-item"
+                        href="order-detail.php?id=<?= urlencode($order['id']) ?>"
+                    >
 
-/* RESPONSIVE: SMALL PHONE */
+                        <!-- FOOD IMAGE -->
+                        <div class="food-image">
+                            <img
+                                src="<?= e($order['image']) ?>"
+                                alt="<?= e($order['name']) ?>"
+                            >
+                        </div>
 
-@media (max-width: 420px) {
-    .app-container {
-        width: 100%;
-    }
+                        <!-- ORDER INFORMATION -->
+                        <div class="order-info">
+                            <h2>#<?= e($order['id']) ?></h2>
 
-    .brand {
-        font-size: 17px;
-    }
+                            <p class="food-name">
+                                <?= e($order['name']) ?>
+                            </p>
 
-    .history-main {
-        padding-right: 12px;
-        padding-left: 12px;
-    }
+                            <p class="order-date">
+                                <?= e($order['date']) ?>
+                            </p>
+                        </div>
 
-    .order-item {
-        grid-template-columns: 48px minmax(75px, 1fr) 12px;
-        column-gap: 8px;
-    }
+                        <!-- STATUS BADGE -->
+                        <div class="order-status">
+                            <span class="status-badge <?= strtolower(e($order['status'])) ?>">
+                                <?= e($order['status']) ?>
+                            </span>
+                        </div>
 
-    .food-image {
-        width: 48px;
-        height: 50px;
-    }
+                        <!-- PRICE AND CALORIES -->
+                        <div class="order-summary">
+                            <span class="price">
+                                <?= rupiah($order['price']) ?>
+                            </span>
 
-    .order-info h2 {
-        font-size: 12px;
-    }
+                            <span class="calories">
+                                <?= number_format($order['calories']) ?> kcal
+                            </span>
+                        </div>
 
-    .food-name {
-        font-size: 11px;
-    }
+                        <!-- ARROW -->
+                        <span class="order-arrow" aria-hidden="true">
+                            ›
+                        </span>
 
-    .order-status {
-        display: none;
-    }
+                    </a>
 
-    .order-summary {
-        grid-column: 2;
-        grid-row: 2;
-        flex-direction: row;
-        justify-content: flex-start;
-        align-items: center;
-        gap: 8px;
-        margin-top: -3px;
-    }
+                <?php endforeach; ?>
 
-    .order-arrow {
-        grid-column: 3;
-        grid-row: 1 / span 2;
-    }
-}
+            <?php endif; ?>
+
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+</html>
+```
