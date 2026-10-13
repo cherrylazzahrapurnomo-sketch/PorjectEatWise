@@ -1,275 +1,286 @@
 <?php
-$foods = [
-    [
-        "name" => "Chicken Rice Bowl",
-        "calories" => 400,
-        "price" => 50000,
-        "image" => "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=500&q=80"
-    ],
-    [
-        "name" => "Saladish",
-        "calories" => 280,
-        "price" => 45000,
-        "image" => "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=500&q=80"
-    ],
-    [
-        "name" => "Oat Berries Meal",
-        "calories" => 150,
-        "price" => 35000,
-        "image" => "https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=500&q=80"
-    ],
-    [
-        "name" => "Tomato Egg",
-        "calories" => 200,
-        "price" => 30000,
-        "image" => "https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?auto=format&fit=crop&w=500&q=80"
-    ],
-    [
-        "name" => "Pancake Nutty Berry",
-        "calories" => 230,
-        "price" => 40000,
-        "image" => "https://images.unsplash.com/photo-1528207776546-365bb710ee93?auto=format&fit=crop&w=500&q=80"
-    ],
-    [
-        "name" => "Infused Water",
-        "calories" => 0,
-        "price" => 20000,
-        "image" => "https://images.unsplash.com/photo-1513558161293-cdaf765edfd7?auto=format&fit=crop&w=500&q=80"
-    ]
-];
+// ============================================================================
+// EatWise - Categories Page (Pure Procedural PHP Native)
+// Primary: #F8F4E9, Secondary Maroon: #752E2A, Success: #4E5134
+// English Localization
+// ============================================================================
+require_once __DIR__ . '/db.php';
 
-$category = $_GET["category"] ?? "All";
+$conn = db_connect();
+$user_id = get_logged_in_user_id();
 
-$categories = ["All", "Healthy", "Breakfast", "Drinks"];
-
-if (!in_array($category, $categories, true)) {
-    $category = "All";
+// Fetch current user's registered allergens
+$user_allergens = [];
+$user_allergen_names = [];
+if ($user_id) {
+    $u_res = mysqli_query($conn, "SELECT ua.allergen_id, a.allergen_name 
+                                  FROM user_allergen ua 
+                                  JOIN allergen a ON ua.allergen_id = a.id 
+                                  WHERE ua.user_id = $user_id");
+    if ($u_res) {
+        while ($ur = mysqli_fetch_assoc($u_res)) {
+            $user_allergens[] = (int)$ur['allergen_id'];
+            $user_allergen_names[(int)$ur['allergen_id']] = $ur['allergen_name'];
+        }
+    }
 }
 
-$filteredFoods = $foods;
-
-if ($category === "Breakfast") {
-    $filteredFoods = array_values(array_filter($foods, function ($food) {
-        return in_array($food["name"], [
-            "Oat Berries Meal",
-            "Pancake Nutty Berry"
-        ], true);
-    }));
-} elseif ($category === "Drinks") {
-    $filteredFoods = array_values(array_filter($foods, function ($food) {
-        return $food["name"] === "Infused Water";
-    }));
+// Handle Add to Cart
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'add_to_cart') {
+    $food_id = (int)($_POST['food_id'] ?? 0);
+    $qty = max(1, (int)($_POST['qty'] ?? 1));
+    if ($food_id > 0) {
+        add_to_cart($food_id, $qty);
+        set_flash('success', 'Meal added to your shopping cart!');
+    }
+    header("Location: cart.php");
+    exit;
 }
+
+// Fetch categories list
+$categories = [];
+$cat_res = mysqli_query($conn, "SELECT id, category_name FROM category ORDER BY id ASC");
+if ($cat_res) {
+    while ($row = mysqli_fetch_assoc($cat_res)) {
+        $c_id = (int)$row['id'];
+        $count_res = mysqli_query($conn, "SELECT COUNT(*) as cnt FROM food WHERE category_id = $c_id");
+        $row['food_count'] = ($count_res && $c_row = mysqli_fetch_assoc($count_res)) ? (int)$c_row['cnt'] : 0;
+        $categories[] = $row;
+    }
+}
+
+// Active category
+$selected_cat_id = isset($_GET['category']) ? (int)$_GET['category'] : 0;
+$where_sql = ($selected_cat_id > 0) ? "WHERE f.category_id = $selected_cat_id" : "";
+
+$foods_sql = "SELECT f.*, c.category_name,
+              GROUP_CONCAT(DISTINCT a.allergen_name SEPARATOR ', ') as allergens,
+              GROUP_CONCAT(DISTINCT fa.allergen_id) as allergen_ids
+              FROM food f
+              LEFT JOIN category c ON f.category_id = c.id
+              LEFT JOIN food_allergen fa ON f.id = fa.food_id
+              LEFT JOIN allergen a ON fa.allergen_id = a.id
+              $where_sql
+              GROUP BY f.id
+              ORDER BY f.id ASC";
+$foods_res = mysqli_query($conn, $foods_sql);
+$foods = [];
+if ($foods_res) {
+    while ($row = mysqli_fetch_assoc($foods_res)) {
+        $row['calories'] = get_food_calories($row['id'], $row['food_name']);
+
+        // Check allergen conflicts
+        $food_allergen_ids = !empty($row['allergen_ids']) ? explode(',', $row['allergen_ids']) : [];
+        $matched_conflicts = [];
+        if (!empty($user_allergens)) {
+            foreach ($food_allergen_ids as $fa_id) {
+                $fa_int = (int)$fa_id;
+                if (in_array($fa_int, $user_allergens, true)) {
+                    $matched_conflicts[] = $user_allergen_names[$fa_int] ?? 'Allergen #' . $fa_int;
+                }
+            }
+        }
+        $row['has_allergy_warning'] = !empty($matched_conflicts);
+        $row['conflicting_allergens'] = implode(', ', $matched_conflicts);
+        $foods[] = $row;
+    }
+}
+
+$page_title = 'Meal Categories';
+require_once __DIR__ . '/navbar.php';
 ?>
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Categories | EatWise</title>
+<div class="container py-4">
 
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+    <!-- PAGE HEADER -->
+    <div class="text-center mb-5">
+        <span class="badge bg-maroon-subtle text-maroon border border-maroon px-3 py-2 rounded-pill fw-semibold mb-2">
+            <i class="bi bi-grid-fill me-1"></i> Browse Categories
+        </span>
+        <h1 class="fw-bold text-maroon font-playfair display-6">EatWise Culinary Categories</h1>
+        <p class="text-muted small">Select your preferred nutritional dish style designed for wholesome health.</p>
+    </div>
 
-<div class="app">
-
-    <!-- NAVBAR -->
-    <header class="navbar">
-        <a href="home.php" class="logo">
-            <span>🍃</span> EatWise
-        </a>
-
-        <nav>
-            <a href="home.php">HOME</a>
-            <a href="categories.php" class="active">CATEGORIES</a>
-            <a href="cart.php">CARTS <span id="cart-count">0</span></a>
-            <a href="profile.php">ACCOUNT</a>
-            <a href="login.php">LOGOUT</a>
-        </nav>
-    </header>
-
-    <!-- CONTENT -->
-    <main class="content">
-
-        <h1 class="page-title">Categories</h1>
-
-        <!-- CATEGORY FILTER -->
-        <div class="category-filter">
-            <?php foreach ($categories as $item): ?>
-                <a
-                    href="?category=<?= urlencode($item) ?>"
-                    class="category-btn <?= $category === $item ? 'selected' : '' ?>"
-                >
-                    <?= htmlspecialchars($item) ?>
-                </a>
-            <?php endforeach; ?>
+    <!-- CATEGORY CARDS / TABS -->
+    <div class="row g-3 mb-4 justify-content-center">
+        <div class="col-6 col-md-3">
+            <a href="catagory.php" class="card text-center p-3 text-decoration-none border shadow-sm rounded-4 transition-all <?= ($selected_cat_id === 0) ? 'bg-maroon text-white border-maroon' : 'bg-white text-dark' ?>">
+                <div class="fs-3 mb-2"><i class="bi bi-collection-fill"></i></div>
+                <h6 class="fw-bold mb-1 font-playfair">All Meals</h6>
+                <small class="<?= ($selected_cat_id === 0) ? 'text-white-50' : 'text-muted' ?>">Total 10 Meals</small>
+            </a>
         </div>
-
-        <!-- FILTER & SORT -->
-        <div class="filter-row">
-            <div>
-                <label for="sort">Filters</label>
-                <select id="sort">
-                    <option value="default">Featured food</option>
-                    <option value="low">Lowest price</option>
-                    <option value="high">Highest price</option>
-                    <option value="calories">Lowest calories</option>
-                </select>
-            </div>
-
-            <p><?= count($filteredFoods) ?> menu tersedia</p>
-        </div>
-
-        <!-- FOOD CARDS -->
-        <section class="food-grid" id="food-grid">
-
-            <?php foreach ($filteredFoods as $food): ?>
-
-                <article
-                    class="food-card"
-                    data-price="<?= $food['price'] ?>"
-                    data-calories="<?= $food['calories'] ?>"
-                >
-                    <a href="detail.php" class="food-image-link">
-                        <img
-                            src="<?= htmlspecialchars($food['image']) ?>"
-                            alt="<?= htmlspecialchars($food['name']) ?>"
-                            class="food-image"
-                        >
-                    </a>
-
-                    <div class="food-info">
-                        <h2><?= htmlspecialchars($food['name']) ?></h2>
-
-                        <div class="food-meta">
-                            <span>
-                                <?= number_format($food['calories']) ?> Kcal
-                            </span>
-
-                            <span>•</span>
-
-                            <span>
-                                Rp <?= number_format(
-                                    $food['price'],
-                                    0,
-                                    ',',
-                                    '.'
-                                ) ?>
-                            </span>
-                        </div>
-
-                        <button
-                            class="add-btn"
-                            type="button"
-                            data-name="<?= htmlspecialchars($food['name']) ?>"
-                        >
-                            + Tambah
-                        </button>
+        <?php foreach ($categories as $cat): 
+            $is_active = ($selected_cat_id === (int)$cat['id']);
+        ?>
+            <div class="col-6 col-md-3">
+                <a href="catagory.php?category=<?= (int)$cat['id'] ?>" class="card text-center p-3 text-decoration-none border shadow-sm rounded-4 transition-all <?= $is_active ? 'bg-maroon text-white border-maroon' : 'bg-white text-dark' ?>">
+                    <div class="fs-3 mb-2">
+                        <?php if (stripos($cat['category_name'], 'salad') !== false): ?>
+                            <i class="bi bi-egg-fried"></i>
+                        <?php elseif (stripos($cat['category_name'], 'bowl') !== false): ?>
+                            <i class="bi bi-cup-hot"></i>
+                        <?php else: ?>
+                            <i class="bi bi-check2-circle"></i>
+                        <?php endif; ?>
                     </div>
-                </article>
+                    <h6 class="fw-bold mb-1 font-playfair"><?= htmlspecialchars($cat['category_name']) ?></h6>
+                    <small class="<?= $is_active ? 'text-white-50' : 'text-muted' ?>"><?= $cat['food_count'] ?> Choices</small>
+                </a>
+            </div>
+        <?php endforeach; ?>
+    </div>
 
-            <?php endforeach; ?>
-
-        </section>
-
-        <?php if (empty($filteredFoods)): ?>
-            <p class="empty-message">Belum ada menu di kategori ini.</p>
+    <!-- FOOD LIST GRID -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold text-dark font-playfair mb-0">
+            <?= ($selected_cat_id === 0) ? 'Showing All Dishes' : 'Selected Category' ?>
+            <span class="text-muted fs-6 fw-normal font-sans">(<?= count($foods) ?> dishes)</span>
+        </h5>
+        <?php if ($selected_cat_id > 0): ?>
+            <a href="catagory.php" class="btn btn-sm btn-outline-secondary rounded-pill">
+                <i class="bi bi-x-circle me-1"></i> Clear Filter
+            </a>
         <?php endif; ?>
+    </div>
 
-    </main>
-
-    <!-- TOTAL BAR -->
-    <footer class="total-bar">
-        <div>
-            Total kalori:
-            <strong id="total-calories">0 Kcal</strong>
+    <?php if (empty($foods)): ?>
+        <div class="card border-0 shadow-sm rounded-4 text-center py-5 bg-white">
+            <h5 class="fw-bold text-maroon font-playfair">No meals found in this category.</h5>
         </div>
+    <?php else: ?>
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4">
+            <?php foreach ($foods as $food): ?>
+                <div class="col">
+                    <div class="card h-100 ew-card">
+                        <div class="food-card-img-wrap">
+                            <img src="<?= htmlspecialchars(get_food_image_url($food['img'], $food['food_name'])) ?>" 
+                                 alt="<?= htmlspecialchars($food['food_name']) ?>" loading="lazy">
+                            <span class="food-card-badge"><?= htmlspecialchars($food['category_name']) ?></span>
+                            <span class="food-calories-badge"><i class="bi bi-fire text-warning"></i> <?= $food['calories'] ?> kcal</span>
+                        </div>
+                        
+                        <div class="card-body p-3 d-flex flex-column">
+                            <h5 class="card-title fw-bold text-dark mb-1 fs-6">
+                                <a href="detail.php?id=<?= $food['id'] ?>" class="text-dark text-decoration-none">
+                                    <?= htmlspecialchars($food['food_name']) ?>
+                                </a>
+                            </h5>
 
-        <div>
-            Total pembayaran:
-            <strong id="total-price">Rp 0</strong>
+                            <p class="card-text text-muted small flex-grow-1 mb-2" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                                <?= htmlspecialchars($food['description'] ?: 'Wholesome balanced nutrition recipe.') ?>
+                            </p>
+
+                            <!-- ALLERGEN BADGES -->
+                            <div class="mb-3">
+                                <?php if ($food['has_allergy_warning']): ?>
+                                    <span class="badge badge-allergy-warning rounded-pill small py-1 px-2" title="Allergen Warning">
+                                        <i class="bi bi-exclamation-triangle-fill me-1"></i> Warning: <?= htmlspecialchars($food['conflicting_allergens']) ?>
+                                    </span>
+                                <?php elseif (!empty($food['allergens'])): ?>
+                                    <span class="badge bg-light text-secondary border rounded-pill small py-1 px-2">
+                                        <i class="bi bi-info-circle me-1"></i> Contains: <?= htmlspecialchars($food['allergens']) ?>
+                                    </span>
+                                <?php else: ?>
+                                    <span class="badge bg-olive-subtle text-olive border border-success-subtle rounded-pill small py-1 px-2">
+                                        <i class="bi bi-check-circle me-1"></i> Free from Common Allergens
+                                    </span>
+                                <?php endif; ?>
+                            </div>
+
+                            <div class="d-flex align-items-center justify-content-between pt-2 border-top">
+                                <div>
+                                    <small class="text-muted d-block" style="font-size: 0.72rem;">Unit Price</small>
+                                    <span class="fw-bold fs-6 text-maroon"><?= format_rupiah($food['price']) ?></span>
+                                </div>
+                                
+                                <div class="d-flex gap-2">
+                                    <a href="detail.php?id=<?= $food['id'] ?>" class="btn btn-sm btn-outline-secondary rounded-pill px-3">
+                                        Details
+                                    </a>
+                                    
+                                    <form method="POST" action="catagory.php<?= $selected_cat_id > 0 ? '?category=' . $selected_cat_id : '' ?>" id="catForm_<?= $food['id'] ?>" class="m-0">
+                                        <input type="hidden" name="action" value="add_to_cart">
+                                        <input type="hidden" name="food_id" value="<?= $food['id'] ?>">
+                                        <input type="hidden" name="qty" value="1">
+                                        
+                                        <?php if ($food['has_allergy_warning']): ?>
+                                            <button type="button" class="btn btn-sm btn-ew-primary rounded-pill px-3" 
+                                                    onclick="triggerCatWarning(<?= $food['id'] ?>, '<?= addslashes(htmlspecialchars($food['food_name'])) ?>', '<?= addslashes(htmlspecialchars($food['conflicting_allergens'])) ?>')">
+                                                <i class="bi bi-cart-plus me-1"></i> Order
+                                            </button>
+                                        <?php else: ?>
+                                            <button type="submit" class="btn btn-sm btn-ew-primary rounded-pill px-3">
+                                                <i class="bi bi-cart-plus me-1"></i> Order
+                                            </button>
+                                        <?php endif; ?>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php endforeach; ?>
         </div>
-
-        <a href="cart.php" class="cart-btn">Lihat Keranjang</a>
-    </footer>
+    <?php endif; ?>
 
 </div>
 
+<!-- ALLERGEN VERIFICATION MODAL -->
+<div class="modal fade" id="catAllergenModal" tabindex="-1" aria-labelledby="catAllergenModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 rounded-4 shadow-lg overflow-hidden">
+            <div class="modal-header border-0 bg-maroon-subtle pb-0">
+                <div class="d-flex align-items-center">
+                    <span class="rounded-circle bg-maroon text-white p-2 d-inline-flex align-items-center justify-content-center me-3" style="width: 44px; height: 44px;">
+                        <i class="bi bi-exclamation-triangle-fill fs-5"></i>
+                    </span>
+                    <div>
+                        <h5 class="modal-title fw-bold text-maroon font-playfair mb-0" id="catAllergenModalLabel">Allergen Safety Warning</h5>
+                        <small class="text-maroon">Precaution Verification</small>
+                    </div>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <p class="mb-3 text-dark">
+                    The dish <strong id="catWarnFoodTitle">...</strong> contains 
+                    <strong id="catWarnAllergenList" class="text-maroon">...</strong>, which is currently flagged in your allergy profile.
+                </p>
+                <div class="alert alert-danger bg-maroon-subtle border-maroon text-maroon p-3 rounded-3 mb-0 small">
+                    <i class="bi bi-info-circle-fill me-1"></i> Are you sure you wish to proceed and order this item anyway?
+                </div>
+            </div>
+            <div class="modal-footer border-0 pt-0 px-4 pb-4">
+                <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">
+                    <i class="bi bi-x-circle me-1"></i> Cancel
+                </button>
+                <button type="button" class="btn btn-ew-primary rounded-pill px-4" id="catConfirmBtn">
+                    <i class="bi bi-cart-check-fill me-1"></i> Yes, Proceed Anyway
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
-    const sortSelect = document.getElementById("sort");
-    const foodGrid = document.getElementById("food-grid");
-    const cartCount = document.getElementById("cart-count");
-    const totalCalories = document.getElementById("total-calories");
-    const totalPrice = document.getElementById("total-price");
+let catTargetFormId = null;
 
-    let cart = [];
+function triggerCatWarning(foodId, foodName, allergens) {
+    catTargetFormId = 'catForm_' + foodId;
+    document.getElementById('catWarnFoodTitle').innerText = foodName;
+    document.getElementById('catWarnAllergenList').innerText = allergens;
+    
+    const warningModal = new bootstrap.Modal(document.getElementById('catAllergenModal'));
+    warningModal.show();
+}
 
-    function formatRupiah(number) {
-        return "Rp " + number.toLocaleString("id-ID");
+document.getElementById('catConfirmBtn').addEventListener('click', function() {
+    if (catTargetFormId) {
+        const form = document.getElementById(catTargetFormId);
+        if (form) form.submit();
     }
-
-    function updateCart() {
-        const count = cart.length;
-
-        const calories = cart.reduce(
-            (sum, item) => sum + item.calories, 0
-        );
-
-        const price = cart.reduce(
-            (sum, item) => sum + item.price, 0
-        );
-
-        cartCount.textContent = count;
-        totalCalories.textContent = calories + " Kcal";
-        totalPrice.textContent = formatRupiah(price);
-    }
-
-    document.querySelectorAll(".add-btn").forEach(button => {
-        button.addEventListener("click", () => {
-            const card = button.closest(".food-card");
-
-            cart.push({
-                name: button.dataset.name,
-                price: Number(card.dataset.price),
-                calories: Number(card.dataset.calories)
-            });
-
-            updateCart();
-
-            button.textContent = "✓ Ditambahkan";
-
-            setTimeout(() => {
-                button.textContent = "+ Tambah";
-            }, 800);
-        });
-    });
-
-    sortSelect.addEventListener("change", () => {
-        const cards = [...foodGrid.querySelectorAll(".food-card")];
-
-        cards.sort((a, b) => {
-            const priceA = Number(a.dataset.price);
-            const priceB = Number(b.dataset.price);
-            const caloriesA = Number(a.dataset.calories);
-            const caloriesB = Number(b.dataset.calories);
-
-            switch (sortSelect.value) {
-                case "low":
-                    return priceA - priceB;
-                case "high":
-                    return priceB - priceA;
-                case "calories":
-                    return caloriesA - caloriesB;
-                default:
-                    return 0;
-            }
-        });
-
-        cards.forEach(card => foodGrid.appendChild(card));
-    });
+});
 </script>
 
-</body>
-</html>
+<?php require_once __DIR__ . '/footer.php'; ?>

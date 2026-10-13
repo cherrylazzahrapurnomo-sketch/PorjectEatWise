@@ -1,277 +1,140 @@
 <?php
+// ============================================================================
+// EatWise - Sign Up Page (Pure Procedural PHP Native)
+// Secondary Maroon: #752E2A, Primary: #F8F4E9
+// English Localization
+// ============================================================================
+require_once __DIR__ . '/db.php';
 
-// ===============================
-// PROSES SIGN UP
-// ===============================
+// If already logged in, redirect to home
+if (get_logged_in_user_id()) {
+    header('Location: home.php');
+    exit;
+}
 
-$message = "";
-$message_type = "";
+$error = '';
+$fullname = '';
+$email = '';
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $fullname = trim($_POST['fullname'] ?? '');
+    $email = trim($_POST['email'] ?? '');
+    $password = trim($_POST['password'] ?? '');
 
-    // Ambil data dari form
-    $fullname = trim($_POST["fullname"]);
-    $email = trim($_POST["email"]);
-    $password = trim($_POST["password"]);
-
-    // Validasi
     if (empty($fullname) || empty($email) || empty($password)) {
-
-        $message = "Please fill in all fields.";
-        $message_type = "error";
-
+        $error = 'All form fields are required.';
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-
-        $message = "Please enter a valid email address.";
-        $message_type = "error";
-
+        $error = 'Invalid email address format.';
     } elseif (strlen($password) < 6) {
-
-        $message = "Password must be at least 6 characters.";
-        $message_type = "error";
-
+        $error = 'Password must be at least 6 characters.';
     } else {
+        $conn = db_connect();
+        $safe_email = db_escape($email);
+        $safe_name = db_escape($fullname);
 
-        /*
-         * Untuk sementara data hanya diproses oleh PHP.
-         *
-         * Nanti bagian ini bisa diganti dengan:
-         * 1. koneksi database
-         * 2. cek email
-         * 3. password_hash()
-         * 4. INSERT ke database
-         */
+        // Check if email already registered
+        $check_sql = "SELECT id FROM users WHERE email = '$safe_email' LIMIT 1";
+        $check_res = mysqli_query($conn, $check_sql);
 
-        $message = "Registration successful!";
-        $message_type = "success";
+        if ($check_res && mysqli_num_rows($check_res) > 0) {
+            $error = 'Email is already registered. Please sign in or use another email.';
+        } else {
+            // Hash password
+            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+            $safe_hash = db_escape($hashed_password);
+
+            $insert_sql = "INSERT INTO users (nama, email, password) VALUES ('$safe_name', '$safe_email', '$safe_hash')";
+            if (mysqli_query($conn, $insert_sql)) {
+                $new_user_id = mysqli_insert_id($conn);
+
+                // Initialize cart record in `cart` table
+                mysqli_query($conn, "INSERT INTO cart (user_id) VALUES ($new_user_id)");
+
+                // Set session
+                $_SESSION['user_id'] = $new_user_id;
+                $_SESSION['user_name'] = $fullname;
+                $_SESSION['user_email'] = $email;
+
+                // Sync guest_cart if any
+                if (!empty($_SESSION['guest_cart'])) {
+                    foreach ($_SESSION['guest_cart'] as $fid => $fqty) {
+                        add_to_cart($fid, $fqty);
+                    }
+                    unset($_SESSION['guest_cart']);
+                }
+
+                set_flash('success', 'Account created successfully! Welcome to EatWise. Now set your dietary preferences.');
+                header('Location: dietery.php');
+                exit;
+            } else {
+                $error = 'Error saving account: ' . mysqli_error($conn);
+            }
+        }
     }
 }
 
+$page_title = 'Create an Account';
+require_once __DIR__ . '/navbar.php';
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card border-0 shadow-lg rounded-4 p-4 p-sm-5 bg-white">
+                <div class="text-center mb-4">
+                    <span class="d-inline-flex align-items-center justify-content-center rounded-3 bg-maroon-subtle text-maroon p-2 fs-3 mb-2" style="width: 54px; height: 54px;">
+                        <i class="bi bi-flower1"></i>
+                    </span>
+                    <h3 class="fw-bold text-maroon font-playfair mt-2">Create Account</h3>
+                    <p class="text-muted small">Begin your wholesome healthy lifestyle journey with EatWise.</p>
+                </div>
 
-<head>
+                <!-- ERROR PREVISION ALERT (MAROON: #752E2A) -->
+                <?php if (!empty($error)): ?>
+                    <div class="alert alert-danger bg-maroon-subtle border border-maroon text-maroon py-2 px-3 small rounded-3 mb-3" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill me-1"></i> <?= htmlspecialchars($error) ?>
+                    </div>
+                <?php endif; ?>
 
-    <meta charset="UTF-8">
+                <form method="POST" action="signup.php">
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold text-muted">Full Name</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-person"></i></span>
+                            <input type="text" name="fullname" class="form-control bg-light border-start-0" placeholder="e.g. Jane Doe" value="<?= htmlspecialchars($fullname) ?>" required autofocus>
+                        </div>
+                    </div>
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold text-muted">Email Address</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-envelope"></i></span>
+                            <input type="email" name="email" class="form-control bg-light border-start-0" placeholder="name@example.com" value="<?= htmlspecialchars($email) ?>" required>
+                        </div>
+                    </div>
 
-    <title>EatWise - Sign Up</title>
+                    <div class="mb-4">
+                        <label class="form-label small fw-semibold text-muted">Password</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-lock"></i></span>
+                            <input type="password" name="password" class="form-control bg-light border-start-0" placeholder="At least 6 characters" required>
+                        </div>
+                        <div class="form-text small">Must be at least 6 characters long.</div>
+                    </div>
 
+                    <button type="submit" class="btn btn-ew-primary w-100 py-2 mb-3">
+                        <i class="bi bi-check-circle me-1"></i> Create My Account
+                    </button>
+                </form>
 
-    <!-- Bootstrap CSS -->
-
-    <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-        rel="stylesheet"
-    >
-
-
-    <!-- Bootstrap Icons -->
-
-    <link
-        rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
-    >
-
-
-    <!-- Custom CSS -->
-
-    <link rel="stylesheet" href="style.css">
-
-</head>
-
-
-<body>
-
-
-<div class="signup-container">
-
-    <div class="signup-card">
-
-
-        <!-- ================= LOGO ================= -->
-
-        <div class="logo-section">
-
-            <div class="leaf-logo">
-                <span></span>
+                <div class="border-top pt-3 text-center">
+                    <p class="small text-muted mb-0">
+                        Already have an account? <a href="login.php" class="fw-bold text-maroon text-decoration-none">Sign in here</a>
+                    </p>
+                </div>
             </div>
-
-            <h1>EatWise</h1>
-
-            <p>Good Food, Smart Choices</p>
-
         </div>
-
-
-
-        <!-- ================= MESSAGE PHP ================= -->
-
-        <?php if (!empty($message)): ?>
-
-            <div
-                class="alert
-                <?php echo ($message_type == 'success')
-                    ? 'alert-success'
-                    : 'alert-danger'; ?>"
-            >
-
-                <?php echo htmlspecialchars($message); ?>
-
-            </div>
-
-        <?php endif; ?>
-
-
-
-        <!-- ================= SIGN UP FORM ================= -->
-
-        <form method="POST" action="signup.php">
-
-
-            <!-- Full Name -->
-
-            <div class="mb-3">
-
-                <label for="fullname" class="form-label">
-                    Full name
-                </label>
-
-                <input
-                    type="text"
-                    name="fullname"
-                    class="form-control"
-                    id="fullname"
-                    placeholder="Enter Your Name"
-                    value="<?php echo isset($_POST['fullname'])
-                        ? htmlspecialchars($_POST['fullname'])
-                        : ''; ?>"
-                >
-
-            </div>
-
-
-
-            <!-- Email -->
-
-            <div class="mb-3">
-
-                <label for="email" class="form-label">
-                    Email
-                </label>
-
-                <input
-                    type="email"
-                    name="email"
-                    class="form-control"
-                    id="email"
-                    placeholder="johndoe@gmail.com"
-                    value="<?php echo isset($_POST['email'])
-                        ? htmlspecialchars($_POST['email'])
-                        : ''; ?>"
-                >
-
-            </div>
-
-
-
-            <!-- Password -->
-
-            <div class="mb-3">
-
-                <label for="password" class="form-label">
-                    Password
-                </label>
-
-                <input
-                    type="password"
-                    name="password"
-                    class="form-control"
-                    id="password"
-                    placeholder="Create Your Password"
-                >
-
-            </div>
-
-
-
-            <!-- Sign Up Button -->
-
-            <button
-                type="submit"
-                class="btn signup-btn"
-            >
-                Sign Up
-            </button>
-
-
-        </form>
-
-
-
-        <!-- ================= DIVIDER ================= -->
-
-        <div class="divider">
-
-            <span></span>
-
-            <p>or</p>
-
-            <span></span>
-
-        </div>
-
-
-
-        <!-- ================= SOCIAL LOGIN ================= -->
-
-        <div class="social-login">
-
-            <button type="button" class="social-btn google">
-                <i class="bi bi-google"></i>
-            </button>
-
-            <button type="button" class="social-btn apple">
-                <i class="bi bi-apple"></i>
-            </button>
-
-            <button type="button" class="social-btn facebook">
-                <i class="bi bi-facebook"></i>
-            </button>
-
-        </div>
-
-
-
-        <!-- ================= LOGIN ================= -->
-
-        <p class="login-text">
-
-            Already have an account?
-
-            <a href="login.php">
-                Log in
-            </a>
-
-        </p>
-
-
     </div>
-
 </div>
 
-
-
-<!-- Bootstrap JS -->
-
-<script
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
-</script>
-
-
-</body>
-
-</html>
+<?php require_once __DIR__ . '/footer.php'; ?>
