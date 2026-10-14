@@ -1,9 +1,5 @@
 <?php
 // ============================================================================
-// EatWise - Order History Page (Pure Procedural PHP Native)
-// Delivered / Success: #4E5134, Cancelled: #752E2A
-// English Localization
-// ============================================================================
 require_once __DIR__ . '/db.php';
 
 require_login();
