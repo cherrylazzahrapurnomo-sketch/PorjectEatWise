@@ -6,44 +6,65 @@
    Font Highlight & Brand: 'Playfair Display'
    ========================================================================== */
 
+/* Import Google Web Fonts: Inter (Body UI) and Playfair Display (Headings & Brand) */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600;1,700&display=swap');
 
+/* ==========================================================================
+   DESIGN TOKENS & CSS VARIABLES
+   Note: Central design token repository for consistent branding across EatWise.
+   Defines colors, typography tokens, elevation shadows, and border radii.
+   ========================================================================== */
 :root {
-    --ew-primary: #F8F4E9;          /* Background color */
-    --ew-secondary: #752E2A;        /* Navbar & Main Maroon Accent */
-    --ew-secondary-dark: #581f1c;   /* Dark Maroon */
-    --ew-secondary-light: #913934;  /* Light Maroon */
-    --ew-secondary-subtle: #fbeeed; /* Maroon soft background tint */
+    /* Brand Maroon Palette */
+    --ew-primary: #F8F4E9;          /* Main application warm-cream background */
+    --ew-secondary: #752E2A;        /* Signature brand maroon for navbar & primary CTA */
+    --ew-secondary-dark: #581f1c;   /* Deep maroon for button hover & focus states */
+    --ew-secondary-light: #913934;  /* Lighter maroon for card borders on hover */
+    --ew-secondary-subtle: #fbeeed; /* Soft pastel maroon tint for alerts & selected cards */
 
-    --ew-success: #4E5134;          /* Green payment success */
-    --ew-success-dark: #3b3d27;     /* Dark Olive */
-    --ew-success-light: #6a6e47;    /* Light Olive */
-    --ew-success-subtle: #f0f1ea;   /* Olive soft tint */
+    /* Payment & Success Olive Green Palette */
+    --ew-success: #4E5134;          /* Olive green for successful payments & confirmed orders */
+    --ew-success-dark: #3b3d27;     /* Dark olive green for success button hover states */
+    --ew-success-light: #6a6e47;    /* Light olive green accent */
+    --ew-success-subtle: #f0f1ea;   /* Soft olive pastel tint for success badges & icons */
 
+    /* Brand Maroon Aliases */
     --ew-maroon: #752E2A;
     --ew-maroon-dark: #581f1c;
     --ew-maroon-subtle: #fbeeed;
 
-    --ew-bg: #F8F4E9;               /* Main background: #F8F4E9 */
-    --ew-card-bg: #ffffff;
-    --ew-border: #e8e2d3;
-    --ew-border-light: #f2ede1;
+    /* Backgrounds & Neutral Borders */
+    --ew-bg: #F8F4E9;               /* Main background color */
+    --ew-card-bg: #ffffff;          /* Pure white card surface */
+    --ew-border: #e8e2d3;           /* Default border color harmonizing with cream background */
+    --ew-border-light: #f2ede1;     /* Subtle secondary border */
 
-    --ew-text: #2c2523;
-    --ew-text-muted: #6e6461;
-    --ew-text-light: #948a86;
+    /* Typography & Neutral Text */
+    --ew-text: #2c2523;             /* Dark warm charcoal for high-readability body text */
+    --ew-text-muted: #6e6461;       /* Medium muted gray for secondary labels & captions */
+    --ew-text-light: #948a86;       /* Light gray for decorative icons & placeholders */
 
-    --ew-shadow-sm: 0 2px 8px rgba(117, 46, 42, 0.05);
-    --ew-shadow: 0 6px 20px rgba(117, 46, 42, 0.08);
-    --ew-shadow-lg: 0 12px 35px rgba(117, 46, 42, 0.12);
+    /* Box Shadow Elevation */
+    --ew-shadow-sm: 0 2px 8px rgba(117, 46, 42, 0.05);   /* Subtle elevation for cards & inputs */
+    --ew-shadow: 0 6px 20px rgba(117, 46, 42, 0.08);     /* Medium elevation for hovered cards */
+    --ew-shadow-lg: 0 12px 35px rgba(117, 46, 42, 0.12); /* High elevation for modal dialogs */
 
-    --ew-radius-sm: 8px;
-    --ew-radius: 14px;
-    --ew-radius-lg: 20px;
-    --ew-radius-full: 9999px;
+    /* Border Radius Scale */
+    --ew-radius-sm: 8px;     /* Small radius: nutrition pills, qty buttons */
+    --ew-radius: 14px;       /* Standard radius: food cards, summary boxes, inputs */
+    --ew-radius-lg: 20px;    /* Large radius: hero section, modal popups */
+    --ew-radius-full: 9999px;/* Full pill radius: category pills, action badges */
 }
 
-/* Base resets & typography */
+/* ==========================================================================
+   BASE RESETS & LAYOUT FOUNDATION
+   ========================================================================== */
+
+/* 
+   body:
+   Note: Sets application-wide background, base font family (Inter), 
+   and creates a full-height flex column layout to guarantee sticky footer behavior.
+*/
 body {
     background-color: var(--ew-bg) !important;
     color: var(--ew-text);
@@ -55,11 +76,25 @@ body {
     padding: 0;
 }
 
+/* 
+   .main-wrapper:
+   Note: Flex child that expands to fill all available vertical space, 
+   pushing the footer to the bottom even on pages with minimal content.
+*/
 .main-wrapper {
     flex: 1 0 auto;
 }
 
-/* Highlight & Playfair Display Font */
+/* ==========================================================================
+   TYPOGRAPHY & BRAND FONT (PLAYFAIR DISPLAY)
+   ========================================================================== */
+
+/* 
+   .brand-logo span, .font-playfair, .display-4, .display-5, .display-6, 
+   h1, h2, .highlight-title, .ew-hero h1, .page-title:
+   Note: Applies the elegant serif 'Playfair Display' font to headings and 
+   brand titles, creating an artisanal culinary identity for EatWise.
+*/
 .brand-logo span,
 .font-playfair,
 .display-4,
@@ -73,36 +108,73 @@ h2,
     font-family: 'Playfair Display', Georgia, "Times New Roman", serif !important;
 }
 
-/* Text & Accent helpers */
+/* ==========================================================================
+   COLOR & ACCENT UTILITY CLASSES
+   ========================================================================== */
+
+/* 
+   .text-maroon:
+   Note: Utility class to force text color to primary brand maroon (#752E2A).
+*/
 .text-maroon {
     color: var(--ew-secondary) !important;
 }
 
+/* 
+   .bg-maroon:
+   Note: Utility class for solid maroon background with crisp white text.
+*/
 .bg-maroon {
     background-color: var(--ew-secondary) !important;
     color: #ffffff !important;
 }
 
+/* 
+   .bg-maroon-subtle:
+   Note: Utility class for soft pastel maroon background with maroon text.
+   Used for gentle alerts, active selections, and allergen notice tags.
+*/
 .bg-maroon-subtle {
     background-color: var(--ew-secondary-subtle) !important;
     color: var(--ew-secondary) !important;
 }
 
+/* 
+   .text-olive:
+   Note: Utility class to force text color to olive green (#4E5134) for success states.
+*/
 .text-olive {
     color: var(--ew-success) !important;
 }
 
+/* 
+   .bg-olive:
+   Note: Utility class for solid olive green background with white text.
+*/
 .bg-olive {
     background-color: var(--ew-success) !important;
     color: #ffffff !important;
 }
 
+/* 
+   .bg-olive-subtle:
+   Note: Utility class for soft olive green pastel background.
+   Used for payment confirmed wrappers and positive dietary indicators.
+*/
 .bg-olive-subtle {
     background-color: var(--ew-success-subtle) !important;
     color: var(--ew-success) !important;
 }
 
-/* Brand Logo in Navbar */
+/* ==========================================================================
+   BRAND LOGO IN NAVBAR
+   ========================================================================== */
+
+/* 
+   .brand-logo:
+   Note: Flexbox container for the EatWise logo in the top navbar.
+   Aligns the leaf icon with the brand text in bold white styling.
+*/
 .brand-logo {
     display: inline-flex;
     align-items: center;
@@ -114,6 +186,11 @@ h2,
     letter-spacing: -0.5px;
 }
 
+/* 
+   .brand-leaf-icon:
+   Note: Square icon badge with semi-transparent background and subtle border.
+   Houses font icons or vector leaf glyphs inside the brand logo.
+*/
 .brand-leaf-icon {
     display: inline-flex;
     align-items: center;
@@ -127,7 +204,15 @@ h2,
     border: 1px solid rgba(248, 244, 233, 0.25);
 }
 
-/* NAVBAR: Secondary Color (#752E2A) */
+/* ==========================================================================
+   NAVBAR: BRAND MAROON THEME (#752E2A)
+   ========================================================================== */
+
+/* 
+   .ew-navbar:
+   Note: Main sticky header bar with brand maroon background.
+   Remains fixed at top (z-index: 1030) with elevation shadow when scrolling.
+*/
 .ew-navbar {
     background-color: var(--ew-secondary) !important;
     border-bottom: 2px solid rgba(0, 0, 0, 0.1);
@@ -138,6 +223,11 @@ h2,
     box-shadow: 0 4px 18px rgba(117, 46, 42, 0.25);
 }
 
+/* 
+   .ew-navbar .nav-link:
+   Note: Individual navigation menu items styled as rounded pills
+   with smooth transition on hover and focus.
+*/
 .ew-navbar .nav-link {
     font-size: 0.92rem;
     font-weight: 600;
@@ -147,11 +237,20 @@ h2,
     transition: all 0.2s ease;
 }
 
+/* 
+   .ew-navbar .nav-link:hover:
+   Note: Hover state for navigation links, adding subtle translucent cream pill background.
+*/
 .ew-navbar .nav-link:hover {
     color: #ffffff !important;
     background-color: rgba(248, 244, 233, 0.15);
 }
 
+/* 
+   .ew-navbar .nav-link.active:
+   Note: Indicates the currently active page in the navbar with solid cream background 
+   and bold maroon text for immediate visual feedback.
+*/
 .ew-navbar .nav-link.active {
     color: var(--ew-secondary) !important;
     background-color: #F8F4E9 !important;
@@ -159,15 +258,28 @@ h2,
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
 }
 
+/* 
+   .ew-navbar .navbar-toggler:
+   Note: Mobile hamburger toggle button with translucent cream border.
+*/
 .ew-navbar .navbar-toggler {
     border-color: rgba(248, 244, 233, 0.4);
     color: #F8F4E9;
 }
 
+/* 
+   .ew-navbar .navbar-toggler-icon:
+   Note: Inverts default dark hamburger SVG icon to bright white for visibility against maroon.
+*/
 .ew-navbar .navbar-toggler-icon {
     filter: invert(1);
 }
 
+/* 
+   .cart-badge-pill:
+   Note: Circular numeric counter badge beside the Cart navigation item.
+   Styled in olive green (#4E5134) to contrast distinctly against the maroon navbar.
+*/
 .cart-badge-pill {
     background-color: var(--ew-success);
     color: #ffffff;
@@ -179,6 +291,11 @@ h2,
     border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
+/* 
+   .nav-user-btn:
+   Note: User profile pill button displayed in navbar when a user is logged in.
+   Inverts colors smoothly on hover from translucent cream to solid cream with maroon text.
+*/
 .nav-user-btn {
     background-color: rgba(248, 244, 233, 0.12) !important;
     border: 1.5px solid rgba(248, 244, 233, 0.4) !important;
@@ -196,6 +313,10 @@ h2,
     border-color: #F8F4E9 !important;
 }
 
+/* 
+   .nav-auth-login-btn:
+   Note: Secondary authentication button for 'Log In' with ghost border styling.
+*/
 .nav-auth-login-btn {
     color: #F8F4E9 !important;
     border: 1.5px solid rgba(248, 244, 233, 0.5) !important;
@@ -211,6 +332,11 @@ h2,
     color: var(--ew-secondary) !important;
 }
 
+/* 
+   .nav-auth-signup-btn:
+   Note: High-priority authentication button for 'Sign Up' featuring solid cream background.
+   Brightens and lifts slightly on hover to prompt registration.
+*/
 .nav-auth-signup-btn {
     background-color: #F8F4E9 !important;
     color: var(--ew-secondary) !important;
@@ -227,7 +353,15 @@ h2,
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-/* Hero Section */
+/* ==========================================================================
+   HERO BANNER SECTION
+   ========================================================================== */
+
+/* 
+   .ew-hero:
+   Note: Welcome showcase card on home page with soft diagonal cream gradient, 
+   generous padding, rounded corners, and soft shadow elevation.
+*/
 .ew-hero {
     background: linear-gradient(135deg, #ffffff 0%, #f6f0e2 100%);
     border-radius: var(--ew-radius-lg);
@@ -239,6 +373,10 @@ h2,
     box-shadow: var(--ew-shadow-sm);
 }
 
+/* 
+   .ew-hero h1:
+   Note: Main promotional heading in Playfair Display serif, deep maroon color, and large scale.
+*/
 .ew-hero h1 {
     font-size: 2.7rem;
     font-weight: 800;
@@ -247,13 +385,25 @@ h2,
     margin-bottom: 16px;
 }
 
+/* 
+   .ew-hero p:
+   Note: Supporting subtitle text in muted tone with constrained max-width for optimal reading length.
+*/
 .ew-hero p {
     font-size: 1.1rem;
     color: var(--ew-text-muted);
     max-width: 580px;
 }
 
-/* BUTTONS */
+/* ==========================================================================
+   BUTTON COMPONENTS & ACTIONS
+   ========================================================================== */
+
+/* 
+   .btn-ew-primary:
+   Note: Primary Call-To-Action button with brand maroon background, white text, 
+   subtle elevation shadow, and micro-interaction lift (translateY -1px) on hover.
+*/
 .btn-ew-primary {
     background-color: var(--ew-secondary);
     border-color: var(--ew-secondary);
@@ -274,6 +424,11 @@ h2,
     box-shadow: 0 6px 16px rgba(117, 46, 42, 0.3);
 }
 
+/* 
+   .btn-ew-outline:
+   Note: Secondary ghost button with maroon outline border.
+   Fills with solid maroon background on hover.
+*/
 .btn-ew-outline {
     background-color: transparent;
     border: 1.5px solid var(--ew-secondary);
@@ -289,6 +444,11 @@ h2,
     color: #ffffff;
 }
 
+/* 
+   .btn-ew-success:
+   Note: Positive action button in olive green (#4E5134).
+   Used for checkout completion, payment confirmation, and success triggers.
+*/
 .btn-ew-success {
     background-color: var(--ew-success);
     border-color: var(--ew-success);
@@ -307,13 +467,21 @@ h2,
     color: #ffffff;
 }
 
+/* 
+   .btn-ew-sm:
+   Note: Button size modifier reducing padding and font size for table cells and card actions.
+*/
 .btn-ew-sm {
     padding: 6px 14px;
     font-size: 0.86rem;
     border-radius: 8px;
 }
 
-/* Social Login Buttons */
+/* 
+   .btn-social:
+   Note: Full-width authentication button for third-party OAuth providers (Google, Apple, Facebook).
+   Styled with clean white background, border, and centered icon/text alignment.
+*/
 .btn-social {
     display: flex;
     align-items: center;
@@ -340,7 +508,15 @@ h2,
     box-shadow: var(--ew-shadow-sm);
 }
 
-/* ERROR PREVENTION STYLING (Maroon #752E2A) */
+/* ==========================================================================
+   ERROR PREVENTION & ALLERGY ALERT SYSTEM
+   ========================================================================== */
+
+/* 
+   .alert-danger, .alert-error-prevention, .error-prevention-card:
+   Note: Custom alert container overriding default Bootstrap styles with 
+   brand maroon subtle tint and border for consistent EatWise design language.
+*/
 .alert-danger,
 .alert-error-prevention,
 .error-prevention-card {
@@ -350,12 +526,20 @@ h2,
     border-radius: var(--ew-radius);
 }
 
+/* 
+   .alert-danger .alert-heading, .alert-error-prevention .alert-heading:
+   Note: Bold maroon heading typography inside alert boxes.
+*/
 .alert-danger .alert-heading,
 .alert-error-prevention .alert-heading {
     color: var(--ew-secondary) !important;
     font-weight: 700;
 }
 
+/* 
+   .badge-allergy-warning:
+   Note: Prominent warning pill badge rendered beside meal items containing user allergens.
+*/
 .badge-allergy-warning {
     background-color: var(--ew-secondary) !important;
     color: #ffffff !important;
@@ -363,7 +547,15 @@ h2,
     font-weight: 700;
 }
 
-/* PAYMENT SUCCESS STYLING (Green #4E5134) */
+/* ==========================================================================
+   PAYMENT SUCCESS & STATUS INDICATORS
+   ========================================================================== */
+
+/* 
+   .status-success-circle:
+   Note: Large circular icon badge (84x84px) in soft olive green pastel with checkmark icon.
+   Rendered on orderConfirmed.php and status.php to celebrate successful transactions.
+*/
 .status-success-circle {
     width: 84px;
     height: 84px;
@@ -379,7 +571,15 @@ h2,
     border: 2px solid rgba(78, 81, 52, 0.2);
 }
 
-/* CARDS */
+/* ==========================================================================
+   FOOD CARDS & CATALOG DISPLAY
+   ========================================================================== */
+
+/* 
+   .ew-card:
+   Note: Standard food product card container with white background, clean border, 
+   and smooth elevation lift (translateY -4px) and light maroon border glow on hover.
+*/
 .ew-card {
     background-color: var(--ew-card-bg);
     border: 1.5px solid var(--ew-border);
@@ -395,6 +595,10 @@ h2,
     border-color: var(--ew-secondary-light);
 }
 
+/* 
+   .food-card-img-wrap:
+   Note: 190px fixed-height container clipping food item thumbnail images.
+*/
 .food-card-img-wrap {
     height: 190px;
     width: 100%;
@@ -403,6 +607,10 @@ h2,
     background-color: #ebe5d8;
 }
 
+/* 
+   .food-card-img-wrap img:
+   Note: Thumbnail image filling card image area with smooth zoom scale (1.05) on card hover.
+*/
 .food-card-img-wrap img {
     width: 100%;
     height: 100%;
@@ -414,6 +622,11 @@ h2,
     transform: scale(1.05);
 }
 
+/* 
+   .food-card-badge:
+   Note: Frosted glassmorphism badge floating on the top-left of food images 
+   displaying dietary category (e.g. Vegetarian, Gluten-Free).
+*/
 .food-card-badge {
     position: absolute;
     top: 12px;
@@ -428,6 +641,11 @@ h2,
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
 
+/* 
+   .food-calories-badge:
+   Note: Dark semi-transparent pill badge floating on the top-right of food images 
+   showing nutritional caloric value (e.g. 450 kcal).
+*/
 .food-calories-badge {
     position: absolute;
     top: 12px;
@@ -440,7 +658,14 @@ h2,
     border-radius: 20px;
 }
 
-/* Filter pills */
+/* ==========================================================================
+   CATEGORY FILTER PILLS
+   ========================================================================== */
+
+/* 
+   .category-pills:
+   Note: Flex container for category filter buttons with automatic wrapping and gap spacing.
+*/
 .category-pills {
     display: flex;
     gap: 10px;
@@ -448,6 +673,11 @@ h2,
     margin-bottom: 24px;
 }
 
+/* 
+   .category-pill:
+   Note: Filter button pill. Default state has white background and muted text; 
+   active and hover states transition to solid maroon with shadow.
+*/
 .category-pill {
     padding: 8px 18px;
     background-color: #ffffff;
@@ -468,12 +698,24 @@ h2,
     box-shadow: 0 3px 10px rgba(117, 46, 42, 0.25);
 }
 
-/* Search input */
+/* ==========================================================================
+   SEARCH BAR INPUT
+   ========================================================================== */
+
+/* 
+   .ew-search-box:
+   Note: Relative positioning container that houses the search field and embedded search icon.
+*/
 .ew-search-box {
     position: relative;
     max-width: 460px;
 }
 
+/* 
+   .ew-search-box input:
+   Note: Rounded search text input with left indent for the magnifying icon 
+   and subtle maroon focus ring.
+*/
 .ew-search-box input {
     border-radius: 30px;
     padding: 12px 20px 12px 46px;
@@ -488,6 +730,10 @@ h2,
     box-shadow: 0 0 0 3px rgba(117, 46, 42, 0.15);
 }
 
+/* 
+   .ew-search-box .search-icon:
+   Note: Magnifying glass icon positioned inside the left edge of the search box.
+*/
 .ew-search-box .search-icon {
     position: absolute;
     left: 18px;
@@ -497,7 +743,14 @@ h2,
     font-size: 1.1rem;
 }
 
-/* Food detail page */
+/* ==========================================================================
+   FOOD DETAIL PAGE COMPONENTS
+   ========================================================================== */
+
+/* 
+   .detail-img-box:
+   Note: Large 420px showcase container for hero food photos on detail.php.
+*/
 .detail-img-box {
     border-radius: var(--ew-radius-lg);
     overflow: hidden;
@@ -513,6 +766,10 @@ h2,
     object-fit: cover;
 }
 
+/* 
+   .nutrition-pill:
+   Note: Card box presenting individual macronutrient stats (protein, carbs, calories, fat).
+*/
 .nutrition-pill {
     background-color: #ffffff;
     border: 1px solid var(--ew-border);
@@ -521,6 +778,10 @@ h2,
     text-align: center;
 }
 
+/* 
+   .nutrition-pill span:
+   Note: Uppercase muted label indicating the nutrient type (e.g. 'PROTEIN').
+*/
 .nutrition-pill span {
     display: block;
     font-size: 0.76rem;
@@ -529,12 +790,23 @@ h2,
     font-weight: 600;
 }
 
+/* 
+   .nutrition-pill strong:
+   Note: Bold numerical nutrient amount in brand maroon (e.g. '32g').
+*/
 .nutrition-pill strong {
     font-size: 1.15rem;
     color: var(--ew-secondary);
 }
 
-/* Quantity selector */
+/* ==========================================================================
+   QUANTITY SELECTOR COMPONENT
+   ========================================================================== */
+
+/* 
+   .qty-control:
+   Note: Inline segmented control grouping minus button, quantity value, and plus button.
+*/
 .qty-control {
     display: inline-flex;
     align-items: center;
@@ -544,6 +816,10 @@ h2,
     overflow: hidden;
 }
 
+/* 
+   .qty-control button:
+   Note: Increment and decrement click targets with maroon hover highlight.
+*/
 .qty-control button {
     border: none;
     background: transparent;
@@ -559,6 +835,10 @@ h2,
     background: var(--ew-secondary-subtle);
 }
 
+/* 
+   .qty-control span, .qty-control input:
+   Note: Center display showing the currently selected quantity integer.
+*/
 .qty-control span,
 .qty-control input {
     width: 40px;
@@ -568,7 +848,14 @@ h2,
     background: transparent;
 }
 
-/* Cart Table & Checkout Summary */
+/* ==========================================================================
+   CART TABLE & CHECKOUT SUMMARY
+   ========================================================================== */
+
+/* 
+   .cart-table th:
+   Note: Styled table headers for cart line items with clean uppercase typography.
+*/
 .cart-table th {
     font-size: 0.84rem;
     text-transform: uppercase;
@@ -577,6 +864,10 @@ h2,
     border-bottom: 2px solid var(--ew-border);
 }
 
+/* 
+   .order-summary-card:
+   Note: Sticky card box summarizing order totals, delivery fee, taxes, and grand total.
+*/
 .order-summary-card {
     background-color: #ffffff;
     border: 1.5px solid var(--ew-border);
@@ -585,6 +876,10 @@ h2,
     box-shadow: var(--ew-shadow-sm);
 }
 
+/* 
+   .summary-row:
+   Note: Key-value flex line item separated by subtle dashed divider.
+*/
 .summary-row {
     display: flex;
     justify-content: space-between;
@@ -594,6 +889,10 @@ h2,
     font-size: 0.95rem;
 }
 
+/* 
+   .summary-row.total-row:
+   Note: Grand total highlight row with large bold maroon typography and removed divider.
+*/
 .summary-row.total-row {
     border-bottom: none;
     padding-top: 16px;
@@ -602,7 +901,15 @@ h2,
     color: var(--ew-secondary);
 }
 
-/* Selectable Cards */
+/* ==========================================================================
+   SELECTABLE CARDS (PAYMENT METHOD & ADDRESS SELECTION)
+   ========================================================================== */
+
+/* 
+   .selectable-card:
+   Note: Clickable option card housing hidden radio inputs for selecting delivery addresses 
+   and payment methods.
+*/
 .selectable-card {
     border: 2px solid var(--ew-border);
     border-radius: var(--ew-radius);
@@ -618,19 +925,35 @@ h2,
     border-color: var(--ew-secondary-light);
 }
 
+/* 
+   .selectable-card:has(input[type="radio"]:checked), .selectable-card.selected:
+   Note: Automatically applies active brand maroon border and subtle pastel background 
+   when the nested radio input is checked.
+*/
 .selectable-card:has(input[type="radio"]:checked),
 .selectable-card.selected {
     border-color: var(--ew-secondary) !important;
     background-color: var(--ew-secondary-subtle) !important;
 }
 
-/* LOGOUT MODAL & ALLERGEN MODAL */
+/* ==========================================================================
+   STANDARD EATWISE MODAL DIALOGS
+   ========================================================================== */
+
+/* 
+   .modal-eatwise .modal-content:
+   Note: Custom modal dialog container with maroon border and rounded corners.
+*/
 .modal-eatwise .modal-content {
     border: 2px solid var(--ew-secondary);
     border-radius: var(--ew-radius-lg);
     box-shadow: var(--ew-shadow-lg);
 }
 
+/* 
+   .modal-eatwise-icon:
+   Note: Circular icon header inside modal dialogs (e.g. logout confirmation).
+*/
 .modal-eatwise-icon {
     width: 68px;
     height: 68px;
@@ -645,17 +968,32 @@ h2,
     border: 1.5px solid rgba(117, 46, 42, 0.2);
 }
 
-/* Preferences badges */
+/* ==========================================================================
+   DIETARY PREFERENCES & ALLERGEN CHECKBOX BADGES
+   ========================================================================== */
+
+/* 
+   .pref-badge-check:
+   Note: Label wrapper transforming native HTML checkboxes into styled interactive badge pills.
+*/
 .pref-badge-check {
     display: inline-block;
     cursor: pointer;
     margin: 4px;
 }
 
+/* 
+   .pref-badge-check input[type="checkbox"]:
+   Note: Visually hides default browser checkbox to let .badge-content handle presentation.
+*/
 .pref-badge-check input[type="checkbox"] {
     display: none;
 }
 
+/* 
+   .pref-badge-check .badge-content:
+   Note: The visual badge pill with icon and title in unselected default state.
+*/
 .pref-badge-check .badge-content {
     display: inline-flex;
     align-items: center;
@@ -670,6 +1008,11 @@ h2,
     transition: all 0.2s ease;
 }
 
+/* 
+   .pref-badge-check input[type="checkbox"]:checked + .badge-content,
+   .pref-badge-check-maroon input[type="checkbox"]:checked + .badge-content:
+   Note: Active selected state styling preference badge in brand maroon with shadow.
+*/
 .pref-badge-check input[type="checkbox"]:checked + .badge-content,
 .pref-badge-check-maroon input[type="checkbox"]:checked + .badge-content {
     background-color: var(--ew-secondary);
@@ -682,6 +1025,10 @@ h2,
     color: #ffffff !important;
 }
 
+/* 
+   .pref-badge-check-olive input[type="checkbox"]:checked + .badge-content:
+   Note: Alternative active state styling badges in olive green for dietary health preferences.
+*/
 .pref-badge-check-olive input[type="checkbox"]:checked + .badge-content {
     background-color: var(--ew-success);
     border-color: var(--ew-success);
@@ -693,7 +1040,14 @@ h2,
     color: #ffffff !important;
 }
 
-/* Footer (No social, no address, no phone) */
+/* ==========================================================================
+   APPLICATION FOOTER
+   ========================================================================== */
+
+/* 
+   .ew-footer:
+   Note: Clean bottom footer bar with border-top separator and generous spacing.
+*/
 .ew-footer {
     background-color: #ffffff;
     border-top: 1.5px solid var(--ew-border);
@@ -701,6 +1055,10 @@ h2,
     margin-top: 60px;
 }
 
+/* 
+   .ew-footer a:
+   Note: Footer navigation links transitioning to brand maroon on hover.
+*/
 .ew-footer a {
     color: var(--ew-text-muted);
     text-decoration: none;
@@ -712,15 +1070,25 @@ h2,
 }
 
 /* ==========================================================================
-   ALLERGEN WARNING MODAL (MATCHING IMAGE 1 DESIGN)
+   ALLERGEN WARNING MODAL (HIGH-IMPACT POPUP DESIGN)
+   Note: Urgent dark-wine modal alerting user before purchasing allergen-bearing food.
    ========================================================================== */
+
+/* 
+   .ew-warn-dialog:
+   Note: Modal dialog wrapper constraining max-width to 530px for centered warning layout.
+*/
 .ew-warn-dialog {
     max-width: 530px;
     margin: 1.75rem auto;
 }
 
+/* 
+   .ew-warn-card:
+   Note: Deep wine-maroon modal body (#441715) with 24px rounded corners and dark shadow.
+*/
 .ew-warn-card {
-    background-color: #441715 !important; /* Deep dark wine maroon matching Image 1 */
+    background-color: #441715 !important; /* Deep dark wine maroon */
     border: none !important;
     border-radius: 24px !important;
     box-shadow: 0 25px 60px rgba(0, 0, 0, 0.65) !important;
@@ -731,20 +1099,32 @@ h2,
     overflow: hidden;
 }
 
+/* 
+   .ew-warn-triangle-icon:
+   Note: Prominent warning triangle icon container centered at the top of the modal.
+*/
 .ew-warn-triangle-icon {
     display: inline-block;
     margin-bottom: 14px;
 }
 
+/* 
+   .ew-warn-title:
+   Note: High-visibility serif title in vibrant red (#ff1e1e) demanding user attention.
+*/
 .ew-warn-title {
     font-family: 'Playfair Display', serif;
-    color: #ff1e1e !important; /* Vibrant Red matching Image 1 */
+    color: #ff1e1e !important; /* Vibrant Red */
     font-size: 1.85rem;
     font-weight: 700;
     margin-bottom: 14px;
     letter-spacing: -0.2px;
 }
 
+/* 
+   .ew-warn-subtext:
+   Note: Explanatory warning description outlining potential allergen risks in warm off-white.
+*/
 .ew-warn-subtext {
     color: #ded5cb;
     font-size: 0.98rem;
@@ -753,6 +1133,10 @@ h2,
     font-weight: 400;
 }
 
+/* 
+   .ew-warn-detected-box:
+   Note: Dark inset container detailing the specific allergen ingredient found in the dish.
+*/
 .ew-warn-detected-box {
     background-color: rgba(0, 0, 0, 0.28);
     border: 1px solid rgba(255, 255, 255, 0.16);
@@ -766,6 +1150,10 @@ h2,
     box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.25);
 }
 
+/* 
+   .ew-warn-icon-wrap:
+   Note: Square icon container for allergen symbol inside the warning summary box.
+*/
 .ew-warn-icon-wrap {
     width: 52px;
     height: 52px;
@@ -775,6 +1163,10 @@ h2,
     flex-shrink: 0;
 }
 
+/* 
+   .ew-warn-detected-title:
+   Note: Bold red label naming the specific conflict allergen (e.g. 'Peanuts Detected').
+*/
 .ew-warn-detected-title {
     color: #ff1e1e; /* Vibrant Red */
     font-size: 1.15rem;
@@ -782,13 +1174,20 @@ h2,
     margin-bottom: 3px;
 }
 
+/* 
+   .ew-warn-detected-sub:
+   Note: Muted caption listing the exact ingredients triggering the allergen alert.
+*/
 .ew-warn-detected-sub {
     color: #c7b8aa;
     font-size: 0.82rem;
     display: block;
 }
 
-/* Primary Button: View Ingredients (Bright Red Pill) */
+/* 
+   .btn-ew-warn-primary:
+   Note: Primary action button in bright warning red pill style (e.g. 'View Ingredients').
+*/
 .btn-ew-warn-primary {
     background-color: #ff0000 !important;
     border-color: #ff0000 !important;
@@ -813,7 +1212,10 @@ h2,
     box-shadow: 0 6px 20px rgba(255, 0, 0, 0.45);
 }
 
-/* Secondary Button: Choose Another Food (Cream Pill, Red Text) */
+/* 
+   .btn-ew-warn-secondary:
+   Note: Secondary action button in soft cream with bold red text (e.g. 'Choose Another Food').
+*/
 .btn-ew-warn-secondary {
     background-color: #f1ede3 !important; /* Soft cream */
     border-color: #f1ede3 !important;
@@ -833,7 +1235,15 @@ h2,
     transform: translateY(-2px);
 }
 
-/* BRAND LEAF LOGO (vector1.png) */
+/* ==========================================================================
+   BRAND LEAF LOGO ASSETS
+   ========================================================================== */
+
+/* 
+   .brand-leaf-svg, .brand-logo-img:
+   Note: Asset styling for PNG/SVG logo files (e.g. vector1.png) in navbar and footer.
+   Ensures crisp rendering, drop shadow, and vertical alignment.
+*/
 .brand-leaf-svg,
 .brand-logo-img {
     display: inline-block;
@@ -843,6 +1253,10 @@ h2,
     filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15));
 }
 
+/* 
+   .brand-logo:
+   Note: Navbar brand link variant ensuring white text contrast against maroon navbar.
+*/
 .brand-logo {
     display: inline-flex;
     align-items: center;
@@ -853,7 +1267,15 @@ h2,
     text-decoration: none;
 }
 
-/* DETAIL BUTTON ON FOOD CARDS */
+/* ==========================================================================
+   FOOD CARD DETAIL BUTTON
+   ========================================================================== */
+
+/* 
+   .btn-ew-outline-detail:
+   Note: Compact pill outline button on food cards linking to detail.php.
+   Transitions from transparent maroon outline to filled solid maroon on hover.
+*/
 .btn-ew-outline-detail {
     background-color: transparent;
     border: 1.5px solid var(--ew-secondary);
