@@ -160,6 +160,7 @@ require_once __DIR__ . '/navbar.php';
                             <span class="food-calories-badge"><i class="bi bi-fire text-warning"></i> <?= $food['calories'] ?> kcal</span>
                         </div>
                         
+                        
                         <div class="card-body p-3 d-flex flex-column">
                             <h5 class="card-title fw-bold text-dark mb-1 fs-6">
                                 <a href="detail.php?id=<?= $food['id'] ?>" class="text-dark text-decoration-none">
