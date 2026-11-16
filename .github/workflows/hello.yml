@@ -1,3 +1,4 @@
+
 name: Hello World Workflow
 
 on:
@@ -20,3 +21,6 @@ jobs:
           echo "Repository: ${{ github.repository }}"
           echo "Branch: ${{ github.ref }}"
           echo "Commit: ${{ github.sha }}"
+
+      - name: Developer B Contribution
+        run: echo "Hello from Developer B - EatWise Team!"
