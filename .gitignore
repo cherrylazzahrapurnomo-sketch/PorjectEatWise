@@ -1,0 +1,7 @@
+
+# Local database dumps - do not upload
+/eatwise.sql
+/eatwise_backup.sql
+
+# Environment variables - do not upload
+.env

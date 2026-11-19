@@ -1,0 +1,40 @@
+
+services:
+  web:
+    build: .
+    container_name: eatwise_web
+    restart: always
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/www/html
+    environment:
+      DB_HOST: ${DB_HOST:-db}
+      DB_USER: ${DB_USER:-root}
+      DB_PASS: ${DB_PASS:?DB_PASS belum diatur}
+      DB_NAME: ${DB_NAME:-eatwise}
+      DB_PORT: ${DB_PORT:-3306}
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: mariadb:10.4
+    container_name: eatwise_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?MYSQL_ROOT_PASSWORD belum diatur}
+      MYSQL_ROOT_HOST: "%"
+      MYSQL_DATABASE: ${DB_NAME:-eatwise}
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p\"$${MYSQL_ROOT_PASSWORD}\" --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+volumes:
+  mysql_data:

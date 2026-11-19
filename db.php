@@ -14,30 +14,49 @@ if (session_status() === PHP_SESSION_NONE) {
  */
 function db_connect() {
     static $conn = null;
-    if ($conn !== null) {
+
+    // Reuse existing database connection
+    if ($conn instanceof mysqli) {
         return $conn;
     }
 
-    $host = '127.0.0.1';
-    $user = 'root';
-    $pass = '';
-    $dbname = 'eatwise';
-    $port = 3306;
+    // Database configuration
+    // Default: XAMPP
+    // Docker can override these values using environment variables
+    $host = getenv('DB_HOST') ?: '127.0.0.1';
+    $user = getenv('DB_USER') ?: 'root';
 
-    $conn = @mysqli_connect($host, $user, $pass, $dbname, $port);
-    if (!$conn) {
-        $conn = @mysqli_connect('localhost', $user, $pass, $dbname);
-    }
+    $password = getenv('DB_PASS');
+    $pass = ($password !== false) ? $password : '';
 
+    $dbname = getenv('DB_NAME') ?: 'eatwise';
+    $port = (int)(getenv('DB_PORT') ?: 3306);
+
+    // Connect to MySQL
+    mysqli_report(MYSQLI_REPORT_OFF);
+
+    $conn = mysqli_connect(
+        $host,
+        $user,
+        $pass,
+        $dbname,
+        $port
+    );
+
+    // Handle connection error
     if (!$conn) {
-        die('<div style="font-family:sans-serif;padding:30px;background:#ffebee;color:#c62828;margin:20px;border-radius:8px;">
-            <h3>Failed to Connect to MySQL Database!</h3>
-            <p>Please ensure MySQL is running in XAMPP.</p>
-            <p><small>Error: ' . htmlspecialchars(mysqli_connect_error()) . '</small></p>
-        </div>');
+        error_log('EatWise Database Error: ' . mysqli_connect_error());
+
+        die(
+            '<div style="font-family:sans-serif;padding:30px;background:#ffebee;color:#c62828;margin:20px;border-radius:8px;">
+                <h3>Database Connection Failed!</h3>
+                <p>Please ensure MySQL is running.</p>
+            </div>'
+        );
     }
 
     mysqli_set_charset($conn, 'utf8mb4');
+
     return $conn;
 }
 
@@ -149,6 +168,7 @@ function get_flash() {
         unset($_SESSION['flash_message']);
         return $flash;
     }
+
     return null;
 }
 
@@ -199,6 +219,7 @@ function get_cart_count() {
     if ($res && $row = mysqli_fetch_assoc($res)) {
         return (int)($row['total_qty'] ?? 0);
     }
+
     return 0;
 }
 
@@ -293,6 +314,7 @@ function get_food_image_url($img_url, $food_name = '') {
     if (!empty($img_url) && filter_var($img_url, FILTER_VALIDATE_URL)) {
         return $img_url;
     }
+
     return 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80';
 }
 
@@ -441,5 +463,3 @@ function get_brand_leaf_svg($width = 36, $height = 36) {
 function get_brand_logo($width = 36, $height = 36) {
     return get_brand_leaf_svg($width, $height);
 }
-
-

@@ -1,0 +1,6 @@
+.env
+.git
+.gitignore
+eatwise.sql
+eatwise_backup.sql
+*.log
