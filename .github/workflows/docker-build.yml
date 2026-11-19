@@ -1,0 +1,36 @@
+
+name: Docker Build
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  docker-build:
+    name: Build EatWise Docker Image
+    runs-on: [self-hosted, runner-2]
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Check Docker Version
+        run: docker --version
+
+      - name: Check Docker Engine
+        run: docker info --format 'Docker Engine: {{.ServerVersion}}'
+
+      - name: Build EatWise Image
+        run: |
+          docker build -t eatwise-build-check:${{ github.sha }} .
+
+      - name: Build Summary
+        run: |
+          echo "Docker Build Successful!"
+          echo "Repository: $GITHUB_REPOSITORY"
+          echo "Branch: $GITHUB_REF_NAME"
+          echo "Commit: $GITHUB_SHA"
