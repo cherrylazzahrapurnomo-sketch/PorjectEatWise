@@ -98,13 +98,24 @@ jobs:
       - name: Build and Deploy Web Container
         run: |
           cd /mnt/d/vscode/PorjectEatWise
-
           docker compose up -d --build --no-deps web
 
       - name: Verify EatWise Deployment
         run: |
           docker ps --filter name=eatwise_web
 
-          curl -fsS http://localhost:8080/ > /dev/null
+          echo "Waiting for EatWise to become ready..."
 
-          echo "EatWise deployment successful!"
+          for i in $(seq 1 30); do
+            if curl -fsS http://localhost:8080/ > /dev/null; then
+              echo "EatWise deployment successful!"
+              exit 0
+            fi
+
+            echo "Attempt $i: EatWise is not ready yet. Waiting 2 seconds..."
+            sleep 2
+          done
+
+          echo "EatWise failed to respond after 60 seconds."
+          docker logs --tail 50 eatwise_web
+          exit 1
