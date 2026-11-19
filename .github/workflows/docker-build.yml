@@ -22,7 +22,8 @@ jobs:
         run: docker --version
 
       - name: Check Docker Engine
-        run: docker info --format 'Docker Engine: {{.ServerVersion}}'
+        run: |
+          docker info --format 'Docker Engine: {{.ServerVersion}}'
 
       - name: Build EatWise Image
         run: |
