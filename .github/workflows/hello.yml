@@ -1,10 +1,17 @@
 
-name: Hello World Workflow
+name: EatWise CI/CD Workflow
 
 on:
   push:
     branches: [ main ]
   workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: eatwise-deployment
+  cancel-in-progress: false
 
 jobs:
   greeting-keiii:
@@ -52,3 +59,52 @@ jobs:
 
       - name: Check Docker Compose
         run: docker compose version
+
+  deploy:
+    name: Deploy EatWise
+    runs-on: [self-hosted, runner-1]
+    needs: [docker-check]
+
+    steps:
+      - name: Check Deployment Directory
+        run: |
+          test -d /mnt/d/vscode/PorjectEatWise
+          test -f /mnt/d/vscode/PorjectEatWise/.env
+          test -f /mnt/d/vscode/PorjectEatWise/docker-compose.yml
+          echo "Deployment directory is ready."
+
+      - name: Check Existing Database
+        run: |
+          DB_STATUS=$(docker inspect -f '{{.State.Health.Status}}' eatwise_db)
+          echo "Database status: $DB_STATUS"
+
+          if [ "$DB_STATUS" != "healthy" ]; then
+            echo "Database is not healthy. Deployment stopped."
+            exit 1
+          fi
+
+      - name: Update Project from GitHub
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          DEPLOY_DIR="/mnt/d/vscode/PorjectEatWise"
+
+          AUTH_HEADER=$(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)
+
+          git -C "$DEPLOY_DIR" \
+            -c http.extraheader="AUTHORIZATION: basic $AUTH_HEADER" \
+            pull --ff-only origin main
+
+      - name: Build and Deploy Web Container
+        run: |
+          cd /mnt/d/vscode/PorjectEatWise
+
+          docker compose up -d --build --no-deps web
+
+      - name: Verify EatWise Deployment
+        run: |
+          docker ps --filter name=eatwise_web
+
+          curl -fsS http://localhost:8080/ > /dev/null
+
+          echo "EatWise deployment successful!"
